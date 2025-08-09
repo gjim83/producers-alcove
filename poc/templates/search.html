@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Shortcut Search</title>
+    <style>
+        form {
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        tbody tr:nth-child(odd) {
+          background-color: darkgray;
+          color: #000;
+        }
+
+        th {
+            background-color: black;
+            color: #dddddd;
+        }
+    </style>
+</head>
+    <body>
+        <form>
+            <input id="searchelems" type="text" placeholder="Type characters to search">
+            <input type="reset" id="searchreset" value="Reset">
+        </form>
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Mac</th>
+                <th>Windows</th>
+            </tr>
+            <tbody id="sctable">
+            {%- for sc in shortcuts %}
+                <tr>
+                    <td>{{ sc['description'] }}</td>
+                    <td>{{ ' + '.join(sc['mac']['mod']) }} + {{ ' or '.join(sc['mac']['chars']) }}</td>
+                    <td>{{ ' + '.join(sc['windows']['mod']) }} + {{ ' or '.join(sc['windows']['chars']) }}</td>
+                </tr>
+            {%-endfor %}
+            </tbody>
+        </table>
+    </body>
+
+    <br>
+
+    <script>
+        let scIndexData = [];
+        const scIndexURL = '{{ url_for("sc_index") }}';
+        fetch(scIndexURL)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            // scIndexData structure: [
+            //      [character, [indices in table where the character is part of the shortcut]],
+            //      [string representation of modifier key, [indices in table where the key is part of the shortcut]],
+            //      ...,
+            //  ]
+            // character: a "typeable" character: letter, comma, number, etc...
+            // modifier key: control, shift, Esc, etc...
+            scIndexData = Object.entries(data.mac); // TODO: hardcoded for Mac, add filter by windows
+        })
+        .catch(error => console.error('Failed to fetch data:', error));
+
+        $(document).ready(function () {
+            $("#searchelems").on("keyup", function (event) {
+                let nonCharKey = '';
+                //console.log(event.keyCode)
+                let rowsToShow = []
+                // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
+                let searchElems = $("#searchelems").val().toLowerCase().split("")
+                console.log('start')
+                console.log(searchElems)
+                switch (event.keyCode) {
+                    {%- for key, data in mod_key_map['mac'].items() %}
+                    case {{ data['keycode'] }}:
+                        nonCharKey = '{{ key }}';
+                        break;
+                    {%- endfor %}
+                }
+                if (nonCharKey.length !== 0) {
+                    searchElems.push(nonCharKey)
+                }
+                console.log('after')
+                console.log(searchElems)
+                let rowsToShowInit = false;
+                let shouldBreak = false;
+                for (let iSE in searchElems) {
+                    for (let iIE in scIndexData) {
+                        if (searchElems[iSE] !== scIndexData[iIE][0]) continue;
+                        if (!rowsToShowInit) {
+                            rowsToShow = scIndexData[iIE][1];
+                            rowsToShowInit = true;
+                            continue; // skip filter if it's the first match
+                        }
+                        rowsToShow = rowsToShow.filter((el) => scIndexData[iIE][1].includes(el))
+                        if (rowsToShow.length === 0 && rowsToShowInit) {
+                            // just stop if the current search combination is already returning no results
+                            shouldBreak = true;
+                            break
+                        }
+                    }
+                    if (shouldBreak) {
+                        break
+                    }
+                }
+
+                $("#sctable tr").each(function (index) {
+                    $(this).toggle(rowsToShow.includes(index) || searchElems.length === 0);
+                });
+            });
+
+            $("#searchreset").click(function () {
+                $("#sctable tr").each(function () {
+                    $(this).toggle(true);
+                });
+            })
+        })
+    </script>
+</html>

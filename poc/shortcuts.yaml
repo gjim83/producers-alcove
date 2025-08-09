@@ -1,0 +1,94 @@
+# mod: modifier keys e.g. shift, control, etc., they are assumed to be ANDed in the shortcut
+#      i.e. mod: ['_shift', '_control'] means both keys are pressed
+#      they start with _ because some like "shift" are built-ins in JS and it automatically
+#      resolves the name to a function or something else
+# chars: character keys e.g. a, b, c, +, 1, 4, etc., assumed to be ORed
+#        i.e. chars: [';', 'p'] means either p or ; are pressed for that sc
+
+# TODO:
+# 20250806-1. add non searchable free-text parameter e.g. "repeatedly" in
+#     'Cycle through all open MIDI Editors | Control+Equal (=) repeatedly'
+# 20250806-2. add free-text-ish parameters for common tasks that can be checkbox chosen in form,
+#     e.g. "drag and drop", "double click"
+#
+#
+#
+#
+
+shortcuts:
+  - description: Record enable tracks that contain the Edit cursor or Edit selection
+    mac:
+      mod: ['_shift']
+      chars: ['r']
+    windows:
+      mod: ['_shift']
+      chars: ['r']
+  - description: Solo tracks that contain the Edit cursor or Edit selection
+    mac:
+      mod: ['_shift']
+      chars: ['s']
+    windows:
+      mod: ['_shift']
+      chars: ['s']
+  - description: Move the Edit cursor up and down through Playlist lanes
+    mac:
+      mod: ['_control']
+      chars: [';', 'p']
+    windows:
+      mod: ['_start']
+      chars: [';', 'p']
+  - description: Create a new playlist for the first selected track in the session
+    mac:
+      mod: ['_control']
+      chars: ['\']
+    windows:
+      mod: ['_start']
+      chars: ['\']
+  - description: Create a new playlist for each track in the session
+    mac:
+      mod: ['_control', '_option']
+      chars: ['\']
+    windows:
+      mod: ['_start', '_alt']
+      chars: ['\']
+  - description: Create a new playlist for each selected track in the session
+    mac:
+      mod: ['_control', '_option', '_shift']
+      chars: ['\']
+    windows:
+      mod: ['_start', '_alt', '_shift']
+      chars: ['\']
+  - description: Duplicate the main playlist for the first selected track in the session
+    mac:
+      mod: ['_command', '_control']
+      chars: ['\']
+    windows:
+      mod: ['_control', '_start']
+      chars: ['\']
+  - description: Duplicate the main playlist for each track in the session
+    mac:
+      mod: ['_command', '_option', '_control']
+      chars: ['\']
+    windows:
+      mod: ['_control', '_alt', '_start']
+      chars: ['\']
+  - description: Duplicate the main playlist for each selected track in the session
+    mac:
+      mod: ['_command', '_option', '_control', '_shift']
+      chars: ['\']
+    windows:
+      mod: ['_control', '_alt', '_start', '_shift']
+      chars: ['\']
+
+
+
+
+#  {
+#    "action":"Move the Edit cursor up and down through Playlist lanes", keycombos:["",""]
+#  }
+#switch document.getElementById('specialKey')
+# case 'Control':
+#   ;
+# case 'Shift':
+#   ;
+#let search = document.getElementById('searchtext').value.split(" ");
