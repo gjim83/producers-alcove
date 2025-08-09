@@ -1,9 +1,6 @@
 # Logic for the calculators
-import logging
 from math import pow
 
-from logging import getLogger
-logger = getLogger(__name__)
 
 # Constants
 NOTES = [
@@ -69,13 +66,7 @@ def eq_temp_freq(note, base_freq):
     note_index = ALL_NOTES.index(note)
     a4_index = ALL_NOTES.index('A4')
     diff = note_index - a4_index
-    logger.error("ALL_NOTES: %s", ALL_NOTES)
-    logger.error("note_index: %s", note_index)
-    logger.error("diff: %s", diff)
-    freq = base_freq * pow(2, diff/12)
-    logger.error("Note freq: {} Hz".format(freq))
-    return freq
-    #return base_freq * pow(2, diff/12)
+    return base_freq * pow(2, diff/12)
 
 
 def get_frequency(note, base_freq, intonation="equal_temp"):

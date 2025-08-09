@@ -60,8 +60,7 @@ def get_shortcuts_index_map():
 
 
 INDEX_MAP = get_shortcuts_index_map()
-#with open("poc/data/sc_index_map.json", "w") as f:
-#    f.write(json.dumps(INDEX_MAP))
+
 
 def get_ui_shortcuts_data():
     """
