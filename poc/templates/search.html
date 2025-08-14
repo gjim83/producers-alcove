@@ -38,12 +38,22 @@
             </tr>
             <tbody id="sctable">
             {%- for sc in shortcuts %}
+                {%- set display_sc = {'mac': '', 'windows': ''} %}
+                {%- for _os in display_sc.keys() %}
+                    {%- set modkey_str = ' + '.join(sc[_os].get('mod', [])) %}
+                    {%- set char_str = ' or '.join(sc[_os].get('chars', [])) %}
+                    {%- if modkey_str and char_str %}
+                        {%- set _ = display_sc.__setitem__(_os, ' + '.join([modkey_str, char_str])) %}
+                    {%- else %}
+                        {%- set _ = display_sc.__setitem__(_os, ''.join([modkey_str, char_str])) %}
+                    {%- endif %}
+                {%- endfor %}
                 <tr>
                     <td>{{ sc['description'] }}</td>
-                    <td>{{ ' + '.join(sc['mac']['mod']) }} + {{ ' or '.join(sc['mac']['chars']) }}</td>
-                    <td>{{ ' + '.join(sc['windows']['mod']) }} + {{ ' or '.join(sc['windows']['chars']) }}</td>
+                    <td>{{ display_sc['mac'] }}</td>
+                    <td>{{ display_sc['windows'] }}</td>
                 </tr>
-            {%-endfor %}
+            {%- endfor %}
             </tbody>
         </table>
     </body>
@@ -75,11 +85,11 @@
         $(document).ready(function () {
             $("#searchelems").on("keyup", function (event) {
                 let nonCharKey = '';
-                //console.log(event.keyCode)
+                console.log(event.keyCode)
                 let rowsToShow = []
                 // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
                 let searchElems = $("#searchelems").val().toLowerCase().split("")
-                console.log('start')
+                console.log('searchElems before push')
                 console.log(searchElems)
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
@@ -91,13 +101,16 @@
                 if (nonCharKey.length !== 0) {
                     searchElems.push(nonCharKey)
                 }
-                console.log('after')
+                console.log('searchElems after push')
                 console.log(searchElems)
                 let rowsToShowInit = false;
                 let shouldBreak = false;
+                let searchElemFound = false;
                 for (let iSE in searchElems) {
+                    searchElemFound = false;
                     for (let iIE in scIndexData) {
                         if (searchElems[iSE] !== scIndexData[iIE][0]) continue;
+                        searchElemFound = true;
                         if (!rowsToShowInit) {
                             rowsToShow = scIndexData[iIE][1];
                             rowsToShowInit = true;
@@ -109,6 +122,12 @@
                             shouldBreak = true;
                             break
                         }
+                    }
+                    if (!searchElemFound) {
+                        // if the current search element was not found in db then by definition the combination
+                        // can't match any commands
+                        rowsToShow = [];
+                        break;
                     }
                     if (shouldBreak) {
                         break

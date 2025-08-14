@@ -79,16 +79,8 @@ shortcuts:
     windows:
       mod: ['_control', '_alt', '_start', '_shift']
       chars: ['\']
-
-
-
-
-#  {
-#    "action":"Move the Edit cursor up and down through Playlist lanes", keycombos:["",""]
-#  }
-#switch document.getElementById('specialKey')
-# case 'Control':
-#   ;
-# case 'Shift':
-#   ;
-#let search = document.getElementById('searchtext').value.split(" ");
+  - description: Cycle through Edit tools
+    mac:
+      mod: ['_esc']
+    windows:
+      mod: ['_esc']

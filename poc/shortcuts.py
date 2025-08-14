@@ -20,10 +20,18 @@ MOD_KEY_MAP = {
             'ui_char': '^',
             'keycode': 17
         },
+        '_esc': {
+            'ui_char': '␛',
+            'keycode': 27
+        }
     },
     'windows': {
         '_shift': {
             'ui_char': '⇧'
+        },
+        '_esc': {
+            'ui_char': '␛',
+            'keycode': 27
         }
     }
 }
@@ -46,9 +54,9 @@ def get_shortcuts_index_map():
     }
     for i, sc in enumerate(SHORTCUTS['shortcuts']):
         for plat in index_map.keys():
-            for char in sc[plat]['chars']:
+            for char in sc[plat].get('chars', []):
                 index_map[plat].setdefault(char, set()).add(i)
-            for modkey in sc[plat]['mod']:
+            for modkey in sc[plat].get('mod', []):
                 index_map[plat].setdefault(modkey, set()).add(i)
 
     # this will be JSON-ified later so convert sets to lists otherwise it goes poof
@@ -72,13 +80,16 @@ def get_ui_shortcuts_data():
     for sc in SHORTCUTS['shortcuts']:
         new_sc = deepcopy(sc)
         for _os in ['mac', 'windows']:
-            new_modkeys = [
-                MOD_KEY_MAP.get(_os, {}).get(key, {}).get('ui_char', key.replace('_', '').title())
-                for key in new_sc[_os]['mod']
-            ]
-            new_sc[_os]['mod'] = new_modkeys
+            if 'mod' in new_sc[_os].keys():
+                new_sc[_os]['mod'] = [
+                    MOD_KEY_MAP[_os].get(key, {}).get(
+                        'ui_char', key.replace('_', '').title()
+                    )
+                    for key in new_sc[_os]['mod']
+                ]
 
-            new_sc[_os]['chars'] = [char.upper() for char in new_sc[_os]['chars']]
+            if 'chars' in new_sc[_os].keys():
+                new_sc[_os]['chars'] = [char.upper() for char in new_sc[_os]['chars']]
         ui_sc_data.append(new_sc)
 
     return ui_sc_data

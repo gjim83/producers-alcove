@@ -63,9 +63,7 @@ def eq_temp_freq(note, base_freq):
 
     :return: 2 decimal float representing the frequency of the note
     """
-    note_index = ALL_NOTES.index(note)
-    a4_index = ALL_NOTES.index('A4')
-    diff = note_index - a4_index
+    diff = ALL_NOTES.index(note) - ALL_NOTES.index('A4')
     return base_freq * pow(2, diff/12)
 
 
