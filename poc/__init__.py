@@ -4,7 +4,7 @@ import os
 from flask import Flask, render_template, request, jsonify
 
 from .calculator import get_frequency, INTONATION_NAME_MAP, ALL_NOTES
-from .shortcuts import INDEX_MAP, get_ui_shortcuts_data, MOD_KEY_MAP
+from .shortcuts import INDEX_MAP, get_ui_shortcuts_data, MOD_KEY_MAP, UI_SC_DATA
 
 def create_app(test_config=None):
     # create and configure the app
@@ -69,7 +69,7 @@ def create_app(test_config=None):
     def search():
         return render_template(
             'search.html',
-            shortcuts=get_ui_shortcuts_data(),
+            shortcuts=UI_SC_DATA,
             mod_key_map=MOD_KEY_MAP
         )
 

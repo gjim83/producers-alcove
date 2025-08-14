@@ -93,3 +93,6 @@ def get_ui_shortcuts_data():
         ui_sc_data.append(new_sc)
 
     return ui_sc_data
+
+
+UI_SC_DATA = get_ui_shortcuts_data()

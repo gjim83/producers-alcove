@@ -30,6 +30,10 @@
             <input id="searchelems" type="text" placeholder="Type characters to search">
             <input type="reset" id="searchreset" value="Reset">
         </form>
+        <p></p>
+        <div id="searchDisplay" align="center">
+            <div>Current search characters: </div><div id="searchDisplayString"></div>
+        </div>
         <table>
             <tr>
                 <th>Description</th>
@@ -61,9 +65,9 @@
     <br>
 
     <script>
+        const modKeyMap = JSON.parse('{{ mod_key_map|tojson }}');
         let scIndexData = [];
-        const scIndexURL = '{{ url_for("sc_index") }}';
-        fetch(scIndexURL)
+        fetch('{{ url_for("sc_index") }}')
         .then((response) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
@@ -82,15 +86,15 @@
         })
         .catch(error => console.error('Failed to fetch data:', error));
 
+        let searchElemsUnique = [];
         $(document).ready(function () {
             $("#searchelems").on("keyup", function (event) {
                 let nonCharKey = '';
-                console.log(event.keyCode)
+                //console.log('keycode pressed')
+                //console.log(event.keyCode)
                 let rowsToShow = []
                 // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
                 let searchElems = $("#searchelems").val().toLowerCase().split("")
-                console.log('searchElems before push')
-                console.log(searchElems)
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
                     case {{ data['keycode'] }}:
@@ -98,18 +102,26 @@
                         break;
                     {%- endfor %}
                 }
+                searchElemsUnique.push(...searchElems);
                 if (nonCharKey.length !== 0) {
-                    searchElems.push(nonCharKey)
+                    searchElemsUnique.push(nonCharKey)
                 }
-                console.log('searchElems after push')
-                console.log(searchElems)
+
+                searchElemsUnique = Array.from(new Set(searchElemsUnique));
+
+                let searchDisplayElems = searchElemsUnique.map((el) =>
+                    el in modKeyMap.mac ? modKeyMap.mac[el].ui_char : el.toUpperCase()
+                );
+
+                $("#searchDisplayString").text(searchDisplayElems.join(" "));
+
                 let rowsToShowInit = false;
                 let shouldBreak = false;
                 let searchElemFound = false;
-                for (let iSE in searchElems) {
+                for (let iSE in searchElemsUnique) {
                     searchElemFound = false;
                     for (let iIE in scIndexData) {
-                        if (searchElems[iSE] !== scIndexData[iIE][0]) continue;
+                        if (searchElemsUnique[iSE] !== scIndexData[iIE][0]) continue;
                         searchElemFound = true;
                         if (!rowsToShowInit) {
                             rowsToShow = scIndexData[iIE][1];
@@ -135,15 +147,18 @@
                 }
 
                 $("#sctable tr").each(function (index) {
-                    $(this).toggle(rowsToShow.includes(index) || searchElems.length === 0);
+                    $(this).toggle(rowsToShow.includes(index) || searchElemsUnique.length === 0);
                 });
             });
 
+
             $("#searchreset").click(function () {
+                searchElemsUnique = [];
+                $("#searchDisplayString").text("");
                 $("#sctable tr").each(function () {
                     $(this).toggle(true);
                 });
-            })
+            });
         })
     </script>
 </html>
