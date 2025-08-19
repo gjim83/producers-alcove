@@ -32,12 +32,13 @@
 </head>
     <body>
         <form>
-            <input id="searchelems" type="text" placeholder="Type characters to search">
-            <input type="reset" id="searchreset" value="Reset">
+            <input id="searchtext" type="text" placeholder="Type text to search in description">
+            <input id="searchelems" type="text" placeholder="Press shortcut keys">
+            <input type="reset" id="searchreset" value="Reset Search">
         </form>
         <p></p>
         <div id="searchDisplay" align="center">
-            <div>Current search characters: </div><div id="searchDisplayString"></div>
+            <div>Current search keys: </div><div id="searchDisplayString"></div>
         </div>
         <table>
             <tr>
@@ -93,6 +94,7 @@
 
         let displayElemIndex = 0;
         let show = true;
+        let scDescription = '';
         let searchElemsUnique = [];
         $(document).ready(function () {
             $("#searchelems").on("keyup", function (event) {
@@ -101,6 +103,7 @@
                 //console.log(event.keyCode)
                 let rowsToShow = []
                 // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
+                let searchText = $.trim($("#searchtext").val()).toLowerCase()
                 let searchElems = $("#searchelems").val().toLowerCase().split("")
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
@@ -156,6 +159,10 @@
                 displayElemIndex = 0;
                 $("#sctable tr").each(function (index) {
                     show = rowsToShow.includes(index) || searchElemsUnique.length === 0;
+                    if (searchText) {
+                        scDescription = $(this).find("td:first").html().toLowerCase()
+                        show = show && scDescription.indexOf(searchText) !== -1;
+                    }
                     $(this).toggle(show);
                     if (!show) { return };
                     /* this should be done by setting the class instead of directly
