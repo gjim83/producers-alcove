@@ -15,7 +15,12 @@
         }
 
         tbody tr:nth-child(odd) {
-          background-color: darkgray;
+          background-color: #fffaf0;
+          color: #000;
+        }
+
+        tbody tr:nth-child(even) {
+          background-color: #dcdcdc;
           color: #000;
         }
 
@@ -75,17 +80,19 @@
             return response.json();
         })
         .then((data) => {
-            // scIndexData structure: [
-            //      [character, [indices in table where the character is part of the shortcut]],
-            //      [string representation of modifier key, [indices in table where the key is part of the shortcut]],
-            //      ...,
-            //  ]
-            // character: a "typeable" character: letter, comma, number, etc...
-            // modifier key: control, shift, Esc, etc...
+            /* scIndexData structure: [
+                  [character, [indices in table where the character is part of the shortcut]],
+                  [string representation of modifier key, [indices in table where the key is part of the shortcut]],
+                  ...,
+              ]
+             character: a "typeable" character: letter, comma, number, etc...
+             modifier key: control, shift, Esc, etc... */
             scIndexData = Object.entries(data.mac); // TODO: hardcoded for Mac, add filter by windows
         })
         .catch(error => console.error('Failed to fetch data:', error));
 
+        let displayElemIndex = 0;
+        let show = true;
         let searchElemsUnique = [];
         $(document).ready(function () {
             $("#searchelems").on("keyup", function (event) {
@@ -136,8 +143,8 @@
                         }
                     }
                     if (!searchElemFound) {
-                        // if the current search element was not found in db then by definition the combination
-                        // can't match any commands
+                        /* if the current search element was not found in db then by definition
+                           the combination can't match any commands */
                         rowsToShow = [];
                         break;
                     }
@@ -146,8 +153,19 @@
                     }
                 }
 
+                displayElemIndex = 0;
                 $("#sctable tr").each(function (index) {
-                    $(this).toggle(rowsToShow.includes(index) || searchElemsUnique.length === 0);
+                    show = rowsToShow.includes(index) || searchElemsUnique.length === 0;
+                    $(this).toggle(show);
+                    if (!show) { return };
+                    /* this should be done by setting the class instead of directly
+                       updating CSS but couldn't get it to work properly */
+                    if (displayElemIndex % 2 === 0) {
+                        $(this).css('background-color', '#dcdcdc');
+                    } else {
+                        $(this).css('background-color', '#fffaf0');
+                    };
+                    displayElemIndex++;
                 });
             });
 
@@ -155,8 +173,13 @@
             $("#searchreset").click(function () {
                 searchElemsUnique = [];
                 $("#searchDisplayString").text("");
-                $("#sctable tr").each(function () {
+                $("#sctable tr").each(function (index) {
                     $(this).toggle(true);
+                    if (index % 2 === 0) {
+                        $(this).css('background-color', '#dcdcdc');
+                    } else {
+                        $(this).css('background-color', '#fffaf0');
+                    };
                 });
             });
         })
