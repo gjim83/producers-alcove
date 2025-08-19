@@ -160,6 +160,8 @@
                 $("#sctable tr").each(function (index) {
                     show = rowsToShow.includes(index) || searchElemsUnique.length === 0;
                     if (searchText) {
+                        /* TODO: consider making full sc structured data available to previous
+                                 function and filter this there instead of parsing HTML values */
                         scDescription = $(this).find("td:first").html().toLowerCase()
                         show = show && scDescription.indexOf(searchText) !== -1;
                     }
