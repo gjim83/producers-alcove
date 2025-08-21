@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>producer's alcove_</title>
+    <style>
+.button {
+  border: none;
+  border-radius: 12px;
+  color: white;
+  background-color: #696969;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover {
+    background-color: #A9A9A9;
+}
+
+    </style>
+
+</head>
+
+<body>
+    <h1 align="center">producer's alcove_</h1>
+    <p></p>
+    <div align="center">
+        <button class="button" onclick="window.location.href='{{ url_for('search') }}' ;">shortcut search</button>
+        <button class="button" onclick="window.location.href='{{ url_for('calc') }}' ;">note to frequency conversion</button>
+       <!-- <button onclick="window.location.href='{{ url_for('search') }}' ;">shortcut search</button> -->
+    </div>
+
+</body>
+</html>

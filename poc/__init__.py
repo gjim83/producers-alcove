@@ -32,7 +32,11 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    # calculator tests
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    # note to freq calculator
     @app.route('/calc', methods=['POST', 'GET'])
     def calc():
         if request.method == 'GET':
@@ -61,6 +65,7 @@ def create_app(test_config=None):
                 all_intonations=INTONATION_NAME_MAP
             )
 
+    # shortcut search
     @app.route('/data/sc_index.json')
     def sc_index():
         return jsonify(INDEX_MAP)
