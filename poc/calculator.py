@@ -5,16 +5,16 @@ from math import pow
 # Constants
 NOTES = [
     "C",
-    "C#/Db",
+    "C♯/D♭",
     "D",
-    "D#/Eb",
+    "D♯/E♭",
     "E",
     "F",
-    "F#/Gb",
+    "F♯/G♭",
     "G",
-    "G#/Ab",
+    "G♯/A♭",
     "A",
-    "A#/Bb",
+    "A♯/B♭",
     "B"
 ]
 
