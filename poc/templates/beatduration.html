@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Note to Frequency Converter</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: green;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Note Duration Calculator</h1>
+    {%- if notes %}
+    <br>
+    <h3>Note durations in miliseconds for {{ sig_num }}/{{ sig_base }} time at {{ bpm}} bpm:</h3>
+    <table>
+        <tr>
+            <th>Note</th>
+            <th>Duration (ms)</th>
+        </tr>
+        <tbody>
+        {%- for note, duration in notes.items() %}
+            <tr>
+                <td>{{ note.title() }}</td>
+                <td>{{ '%0.2f' | format(duration*1000) }}</td>
+            </tr>
+        {%- endfor %}
+        </tbody>
+    </table>
+    <br>
+    <p>Try another one:</p>
+    {%- endif %}
+
+    {%- block content %}
+    <form method="post">
+        <div>
+            <label for="bpm">Tempo (beats per minute):</label>
+            <input type="number" name="bpm" id="bpm" step="0.001"
+                   placeholder="{{ bpm }}" min="1" max="500" value="{{ bpm }}" required>
+        </div>
+        <div>
+            <label for="time_sig">Time Signature: </label>
+            <select id="sig_num" name="sig_num">
+                {%- for n in range(1,16) %}
+                    {%- set selected_str = '' %}
+                    {%- if n == sig_num %}
+                        {%- set selected_str = ' selected' %}
+                    {%- endif %}
+                <option value="{{ n }}"{{ selected_str }}>{{ n }}</option>
+                {%-endfor %}
+            </select>/
+            <select id="sig_base" name="sig_base">
+                {%- for n in [4, 8] %}
+                    {%- set selected_str = '' %}
+                    {%- if n == sig_base %}
+                        {%- set selected_str = ' selected' %}
+                    {%- endif %}
+                <option value="{{ n }}"{{ selected_str }}>{{ n }}</option>
+                {%-endfor %}
+            </select>
+        </div>
+        <input type="submit" value="Calculate">
+    </form>
+    {%- endblock %}
+
+</body>
+
+</html>

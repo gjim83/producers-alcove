@@ -18,7 +18,19 @@ NOTES = [
     "B"
 ]
 
+
 OCTAVES = list(range(9))
+
+
+MULTIPLIERS = {
+    'minim': 2,
+    'crotchet': 1,
+    'quaver': 1/2,
+    'semi-quaver': 1/4
+}
+
+DOTTED = ['crotchet', 'quaver']
+
 
 def get_all_notes():
     """
@@ -81,3 +93,35 @@ def get_frequency(note, base_freq, intonation="equal_temp"):
     if intonation == "equal_temp":
         return eq_temp_freq(note, base_freq)
     return None
+
+
+def get_note_durations(time_sig_base, bpm):
+    """
+    Calculate the duration of different note lengths according to the time signature base
+    of the measure and the beats per minute
+
+    :param time_sig: denominator of time signature, i.e. 4 in 3/4, 8 in 12/8
+    :param bpm: beats per minute
+
+    :return: duration in miliseconds of most common notes
+    """
+    def _rel_duration(sig_base, multiplier):
+        """
+        Get ratio to beat of each note in MULTIPLIER.
+
+        E.g.
+
+        In x/4 time signatures, a minim is 2x the beat and a semiquaver 1/4 the beat
+        In x/8, a crotchet is 2/3 the beat
+        """
+        return multiplier if sig_base == 4 else multiplier * 2/3
+
+    beat_len = 60/bpm
+
+    durations = {}
+    for note, multiplier in MULTIPLIERS.items():
+        if note in DOTTED:
+            durations[f'dotted {note}'] = beat_len * _rel_duration(time_sig_base, multiplier) * 1.5
+        durations[note] = beat_len * _rel_duration(time_sig_base, multiplier)
+
+    return durations

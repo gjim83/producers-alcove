@@ -1,10 +1,10 @@
 import json
 import os
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 
-from .calculator import get_frequency, INTONATION_NAME_MAP, ALL_NOTES
-from .shortcuts import INDEX_MAP, get_ui_shortcuts_data, MOD_KEY_MAP, UI_SC_DATA
+from .calculator import get_frequency, get_note_durations, INTONATION_NAME_MAP, ALL_NOTES
+from .shortcuts import get_ui_shortcuts_data, INDEX_MAP, MOD_KEY_MAP, UI_SC_DATA
 
 def create_app(test_config=None):
     # create and configure the app
@@ -37,11 +37,15 @@ def create_app(test_config=None):
         return render_template('index.html')
 
     # note to freq calculator
-    @app.route('/calc', methods=['POST', 'GET'])
+    @app.route('/calc')
     def calc():
+        return redirect(url_for('note2freq'))
+
+    @app.route('/note2freq', methods=['POST', 'GET'])
+    def note2freq():
         if request.method == 'GET':
             return render_template(
-                'calc.html',
+                'note2freq.html',
                 freq=-1,
                 base_freq=440.0,
                 note='A4',
@@ -50,7 +54,7 @@ def create_app(test_config=None):
             )
         elif request.method == 'POST':
             return render_template(
-                'calc.html',
+                'note2freq.html',
                 freq="{:.2f}".format(
                     calculator.get_frequency(
                         request.form['note'],
@@ -63,6 +67,29 @@ def create_app(test_config=None):
                 intonation=INTONATION_NAME_MAP[request.form['intonation']],
                 all_notes=ALL_NOTES,
                 all_intonations=INTONATION_NAME_MAP
+            )
+
+    # bpm to note duration calculator
+    @app.route('/beatduration', methods=['POST', 'GET'])
+    def beatduration():
+        if request.method == 'GET':
+            return render_template(
+                'beatduration.html',
+                notes=None,
+                sig_num=4,
+                sig_base=4,
+                bpm=120,
+            )
+        elif request.method == 'POST':
+            sig_base = int(request.form['sig_base'])
+            sig_num = int(request.form['sig_num'])
+            bpm = float(request.form['bpm'])
+            return render_template(
+                'beatduration.html',
+                notes=get_note_durations(sig_base, bpm),
+                sig_num=sig_num,
+                sig_base=sig_base,
+                bpm=bpm,
             )
 
     # shortcut search
