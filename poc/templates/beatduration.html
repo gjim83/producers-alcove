@@ -16,6 +16,10 @@
             color: green;
         }
 
+        img {
+            height: 1em;
+        }
+
         table {
             border-collapse: collapse;
             width: 50%;
@@ -35,19 +39,19 @@
     <h1>Note Duration Calculator</h1>
     {%- if notes %}
     <br>
-    <h3>Note durations in miliseconds for {{ sig_num }}/{{ sig_base }} time at {{ bpm}} bpm:</h3>
+    <h3>Note durations in miliseconds at {{ bpm}} bpm (1 beat = <img src="static/images/8th_note.png">{{ "" if sig_base == 4 else "˙" }}):</h3>
     <table>
-        <tr>
-            <th>Note</th>
-            <th>Duration (ms)</th>
-        </tr>
         <tbody>
-        {%- for note, duration in notes.items() %}
             <tr>
-                <td>{{ note.title() }}</td>
-                <td>{{ '%0.2f' | format(duration*1000) }}</td>
+            {%- for note in notes.keys() %}
+                <td>{{ note }}</td>
+            {%- endfor %}
             </tr>
-        {%- endfor %}
+            <tr>
+            {%- for duration in notes.values() %}
+                <td>{{ '%0.2f' | format(duration*1000) }}</td>
+            {%- endfor %}
+            </tr>
         </tbody>
     </table>
     <br>
@@ -62,25 +66,11 @@
                    placeholder="{{ bpm }}" min="1" max="500" value="{{ bpm }}" required>
         </div>
         <div>
-            <label for="time_sig">Time Signature: </label>
-            <select id="sig_num" name="sig_num">
-                {%- for n in range(1,16) %}
-                    {%- set selected_str = '' %}
-                    {%- if n == sig_num %}
-                        {%- set selected_str = ' selected' %}
-                    {%- endif %}
-                <option value="{{ n }}"{{ selected_str }}>{{ n }}</option>
-                {%-endfor %}
-            </select>/
-            <select id="sig_base" name="sig_base">
-                {%- for n in [4, 8] %}
-                    {%- set selected_str = '' %}
-                    {%- if n == sig_base %}
-                        {%- set selected_str = ' selected' %}
-                    {%- endif %}
-                <option value="{{ n }}"{{ selected_str }}>{{ n }}</option>
-                {%-endfor %}
-            </select>
+            Beat Base:&nbsp;
+            <input type="radio" id="4" name="sig_base" value="4"{{ " checked" if sig_base == 4 else "" }}>
+            <label for="4"><img src="static/images/8th_note.png"></label>
+            <input type="radio" id="8" name="sig_base" value="8"{{ " checked" if sig_base == 8 else "" }}>
+            <label for="8"><img src="static/images/8th_note.png">•</label>
         </div>
         <input type="submit" value="Calculate">
     </form>

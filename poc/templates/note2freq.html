@@ -42,34 +42,30 @@
     {%- endif %}
 
     {%- block content %}
-      <form method="post">
-          <div>
+    <form method="post">
+        <div>
             <label for="base_freq">Tuning reference frequency (Hz):</label>
             <input type="number" name="base_freq" id="base_freq" step="0.1"
                    placeholder="{{ base_freq }}" min="400" max="450" value="{{ base_freq }}" required>
-          </div>
-          <div>
-              <label for="intonation">Intonation: </label>
-        <select id="intonation" name="intonation">
+        </div>
+        <div>
+            <label for="intonation">Intonation: </label>
+            <select id="intonation" name="intonation">
             {%- for val, title in all_intonations.items() %}
-            <option value="{{ val }}" >{{ title.title() }}</option>
+                <option value="{{ val }}" >{{ title.title() }}</option>
             {%-endfor %}
-        </select>
-              </div>
-          <div>
-        <label for="note">Note: </label>
-        <select id="note" name="note">
+            </select>
+        </div>
+        <div>
+            <label for="note">Note: </label>
+            <select id="note" name="note">
             {%- for _note in all_notes %}
-                {%- set selected_str = "" %}
-                {%- if _note == note %}
-                    {%- set selected_str = " selected" %}
-                {%- endif %}
-            <option value="{{ _note }}"{{ selected_str }}>{{ _note }}</option>
+                <option value="{{ _note }}"{{ " selected" if _note == note else "" }}>{{ _note }}</option>
             {%-endfor %}
-        </select>
-              </div>
+            </select>
+        </div>
         <input type="submit" value="Calculate">
-      </form>
+    </form>
     {%- endblock %}
 
 </body>

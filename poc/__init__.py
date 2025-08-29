@@ -76,18 +76,15 @@ def create_app(test_config=None):
             return render_template(
                 'beatduration.html',
                 notes=None,
-                sig_num=4,
                 sig_base=4,
                 bpm=120,
             )
         elif request.method == 'POST':
             sig_base = int(request.form['sig_base'])
-            sig_num = int(request.form['sig_num'])
             bpm = float(request.form['bpm'])
             return render_template(
                 'beatduration.html',
                 notes=get_note_durations(sig_base, bpm),
-                sig_num=sig_num,
                 sig_base=sig_base,
                 bpm=bpm,
             )

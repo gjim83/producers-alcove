@@ -23,13 +23,17 @@ OCTAVES = list(range(9))
 
 
 MULTIPLIERS = {
-    'minim': 2,
-    'crotchet': 1,
-    'quaver': 1/2,
-    'semi-quaver': 1/4
+    '1/2': 1/2,
+    '1/4d': 1/4*1.5,
+    '1/4': 1/4,
+    '1/8d': 1/8*1.5,
+    '1/8': 1/8,
+    '1/8t': 1/8*2/3,
+    '1/16': 1/16,
+    '1/16t': 1/16*2/3,
+    '1/32': 1/32,
+    '1/64': 1/64
 }
-
-DOTTED = ['crotchet', 'quaver']
 
 
 def get_all_notes():
@@ -48,7 +52,11 @@ def get_all_notes():
                 continue
             reached_a0 = True
             if "/" in note:
-                all_notes.append('/'.join(f"{accidental}{octave}" for accidental in note.split('/')))
+                all_notes.append(
+                    '/'.join(
+                        f"{accidental}{octave}" for accidental in note.split('/')
+                    )
+                )
                 continue
             all_notes.append(f"{note}{octave}")
             if note == "C" and octave == 8:
@@ -120,8 +128,6 @@ def get_note_durations(time_sig_base, bpm):
 
     durations = {}
     for note, multiplier in MULTIPLIERS.items():
-        if note in DOTTED:
-            durations[f'dotted {note}'] = beat_len * _rel_duration(time_sig_base, multiplier) * 1.5
         durations[note] = beat_len * _rel_duration(time_sig_base, multiplier)
 
     return durations
