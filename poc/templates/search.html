@@ -3,6 +3,7 @@
 
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/static/js/main.js"></script>
     <title>Shortcut Search</title>
     <style>
         form {
@@ -34,7 +35,8 @@
         <form>
             <input id="searchtext" type="text" placeholder="Type text to search in description">
             <input id="searchelems" type="text" placeholder="Press shortcut keys">
-            <input type="reset" id="searchreset" value="Reset Search">
+            <input type="button" id="searchkeyreset" value="Reset Key Search">
+            <br><input type="reset" id="fullreset" value="Reset Full Search">
         </form>
         <p></p>
         <div id="searchDisplay" align="center">
@@ -50,25 +52,23 @@
             {%- for sc in shortcuts %}
                 {%- set display_sc = {'mac': '', 'windows': ''} %}
                 {%- for _os in display_sc.keys() %}
-                    {%- set modkey_str = ' + '.join(sc[_os].get('mod', [])) %}
+                    {%- set modkey_str = ' <small>+</small> '.join(sc[_os].get('mod', [])) %}
                     {%- set char_str = ' or '.join(sc[_os].get('chars', [])) %}
                     {%- if modkey_str and char_str %}
-                        {%- set _ = display_sc.__setitem__(_os, ' + '.join([modkey_str, char_str])) %}
+                        {%- set _ = display_sc.__setitem__(_os, ' <small>+</small> '.join([modkey_str, char_str]))|safe %}
                     {%- else %}
                         {%- set _ = display_sc.__setitem__(_os, ''.join([modkey_str, char_str])) %}
                     {%- endif %}
                 {%- endfor %}
                 <tr>
                     <td>{{ sc['description'] }}</td>
-                    <td>{{ display_sc['mac'] }}</td>
-                    <td>{{ display_sc['windows'] }}</td>
+                    <td>{{ display_sc['mac']|safe }}</td>
+                    <td>{{ display_sc['windows']|safe }}</td>
                 </tr>
             {%- endfor %}
             </tbody>
         </table>
     </body>
-
-    <br>
 
     <script>
         const modKeyMap = JSON.parse('{{ mod_key_map|tojson }}');
@@ -96,14 +96,41 @@
         let show = true;
         let scDescription = '';
         let searchElemsUnique = [];
+        let searchText =  '';
+        let rowsToShowKeys = [];  // rows to show if user has searched for shortcut keys
+        let rowsToShowText = [];  // rows to show if user has searched for shortcut description
         $(document).ready(function () {
+            $("#searchtext").on("keyup", function () {
+                rowsToShowText = [];
+                displayElemIndex = 0;
+                searchText = $.trim($("#searchtext").val()).toLowerCase()
+                $("#sctable tr").each(function (index) {
+                    let allowedByKeySearch = true;
+                    if (searchElemsUnique.length > 0) {
+                        allowedByKeySearch = rowsToShowKeys.indexOf(index) !== -1;
+                    }
+                    scDescription = $(this).find("td:first").html().toLowerCase()
+                    show = allowedByKeySearch && scDescription.indexOf(searchText) !== -1;
+                    $(this).toggle(show);
+                    if (!show) { return };
+                    /* this should be done by setting the class instead of directly
+                       updating CSS but couldn't get it to work properly */
+                    if (displayElemIndex % 2 === 0) {
+                        $(this).css('background-color', '#dcdcdc');
+                    } else {
+                        $(this).css('background-color', '#fffaf0');
+                    };
+                    displayElemIndex++;
+                    rowsToShowText.push(index)
+                });
+            });
+
             $("#searchelems").on("keyup", function (event) {
+                rowsToShowKeys = [];
                 let nonCharKey = '';
                 //console.log('keycode pressed')
                 //console.log(event.keyCode)
-                let rowsToShow = []
                 // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
-                let searchText = $.trim($("#searchtext").val()).toLowerCase()
                 let searchElems = $("#searchelems").val().toLowerCase().split("")
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
@@ -134,12 +161,12 @@
                         if (searchElemsUnique[iSE] !== scIndexData[iIE][0]) continue;
                         searchElemFound = true;
                         if (!rowsToShowInit) {
-                            rowsToShow = scIndexData[iIE][1];
+                            rowsToShowKeys = scIndexData[iIE][1];
                             rowsToShowInit = true;
                             continue; // skip filter if it's the first match
                         }
-                        rowsToShow = rowsToShow.filter((el) => scIndexData[iIE][1].includes(el))
-                        if (rowsToShow.length === 0 && rowsToShowInit) {
+                        rowsToShowKeys = rowsToShowKeys.filter((el) => scIndexData[iIE][1].includes(el))
+                        if (rowsToShowKeys.length === 0 && rowsToShowInit) {
                             // just stop if the current search combination is already returning no results
                             shouldBreak = true;
                             break
@@ -148,7 +175,7 @@
                     if (!searchElemFound) {
                         /* if the current search element was not found in db then by definition
                            the combination can't match any commands */
-                        rowsToShow = [];
+                        rowsToShowKeys = [];
                         break;
                     }
                     if (shouldBreak) {
@@ -158,13 +185,12 @@
 
                 displayElemIndex = 0;
                 $("#sctable tr").each(function (index) {
-                    show = rowsToShow.includes(index) || searchElemsUnique.length === 0;
-                    if (searchText) {
-                        /* TODO: consider making full sc structured data available to previous
-                                 function and filter this there instead of parsing HTML values */
-                        scDescription = $(this).find("td:first").html().toLowerCase()
-                        show = show && scDescription.indexOf(searchText) !== -1;
+                    searchText = $.trim($("#searchtext").val()).toLowerCase()
+                    let allowedByTextSearch = true;
+                    if (searchText.length > 0) {
+                        allowedByTextSearch = rowsToShowText.indexOf(index) !== -1;
                     }
+                    show = (rowsToShowKeys.includes(index) || searchElemsUnique.length === 0) && allowedByTextSearch;
                     $(this).toggle(show);
                     if (!show) { return };
                     /* this should be done by setting the class instead of directly
@@ -178,9 +204,30 @@
                 });
             });
 
-
-            $("#searchreset").click(function () {
+            $("#searchkeyreset").click(function () {
+                displayElemIndex = 0;
                 searchElemsUnique = [];
+                rowsToShowKeys = [];
+                $("#searchDisplayString").text("");
+                $("#searchelems").val("")
+                $("#sctable tr").each(function (index) {
+                    show = rowsToShowText.indexOf(index) !== -1 || searchText.length === 0;
+                    $(this).toggle(show);
+                    if (show) {
+                        if (displayElemIndex % 2 === 0) {
+                            $(this).css('background-color', '#dcdcdc');
+                        } else {
+                            $(this).css('background-color', '#fffaf0');
+                        };
+                        displayElemIndex++;
+                    };
+                });
+            });
+
+            $("#fullreset").click(function () {
+                searchElemsUnique = [];
+                rowsToShowKeys = [];
+                rowsToShowText = [];
                 $("#searchDisplayString").text("");
                 $("#sctable tr").each(function (index) {
                     $(this).toggle(true);
