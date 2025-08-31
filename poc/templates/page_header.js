@@ -2,9 +2,11 @@
         <!-- Title -->
         <h1 class="main-title">producers' alcove_</h1>
 
+    {%- if page_data.subtitle  %}
         <!-- Subtitle -->
         <h2 class="main-title subtitle">{{ page_data.subtitle }}</h2>
 
+    {%- endif %}
         <!-- Menu -->
         <div class="menu-container">
             <input id="clicker" type="checkbox" name="menu" style="opacity: 0;">
