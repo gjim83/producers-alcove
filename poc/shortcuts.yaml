@@ -48,24 +48,24 @@ shortcuts:
       mod: ['_shift']
       chars: ['i']
   # clip navigation
-  - description: Go to and select next Clip
+  - description: Go to and select next Clip (option 1)
     mac:
       mod: ['_control', '_tab']
     windows:
       mod: ['_start', '_tab']
-  - description: Go to and select next Clip
+  - description: Go to and select next Clip (option 2)
     mac:
       mod: ['_command', '_control']
       chars: ["'"]
     windows:
       mod: ['_ctrl', '_start']
       chars: ["'"]
-  - description: Go to and select previous Clip
+  - description: Go to and select previous Clip (option 1)
     mac:
       mod: ['_control', '_option', '_tab']
     windows:
       mod: ['_ctrl', '_start', '_tab']
-  - description: Go to and select previous Clip
+  - description: Go to and select previous Clip (option 2)
     mac:
       mod: ['_command', '_control']
       chars: ['l']
@@ -92,24 +92,24 @@ shortcuts:
       mod: ['_option', '_shift', '_tab']
     windows:
       mod: ['_ctrl', '_shift', '_tab']
-  - description: Extend selection to include next Clip
+  - description: Extend selection to include next Clip (option 1)
     mac:
       mod: ['_control', '_shift', '_tab']
     windows:
       mod: ['_start', '_shift', '_tab']
-  - description: Extend selection to include next Clip
+  - description: Extend selection to include next Clip (option 2)
     mac:
       mod: ['_command', '_control', '_shift']
       chars: ["'"]
     windows:
       mod: ['_ctrl', '_start', '_shift']
       chars: ["'"]
-  - description: Extend selection to include previous Clip
+  - description: Extend selection to include previous Clip (option 1)
     mac:
       mod: ['_control', '_shift', '_option', '_tab']
     windows:
       mod: ['_start', '_shift', '_ctrl', '_tab']
-  - description: Extend selection to include next Clip
+  - description: Extend selection to include previous Clip (option 2)
     mac:
       mod: ['_command', '_control', '_shift']
       chars: ['l']
