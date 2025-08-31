@@ -16,6 +16,7 @@
 #
 
 shortcuts:
+  # track status
   - description: Record enable tracks that contain the Edit cursor or Edit selection
     mac:
       mod: ['_shift']
@@ -30,6 +31,177 @@ shortcuts:
     windows:
       mod: ['_shift']
       chars: ['s']
+  - description: Mute tracks that contain the Edit cursor or Edit selection
+    mac:
+      mod: ['_shift']
+      chars: ['m']
+    windows:
+      mod: ['_shift']
+      chars: ['m']
+  - description: |
+      Input Monitor tracks that contain the Edit cursor or Edit selection
+      (Pro Tools Ultimate only)
+    mac:
+      mod: ['_shift']
+      chars: ['i']
+    windows:
+      mod: ['_shift']
+      chars: ['i']
+  # clip navigation
+  - description: Go to and select next Clip
+    mac:
+      mod: ['_control', '_tab']
+    windows:
+      mod: ['_start', '_tab']
+  - description: Go to and select next Clip
+    mac:
+      mod: ['_command', '_control']
+      chars: ["'"]
+    windows:
+      mod: ['_ctrl', '_start']
+      chars: ["'"]
+  - description: Go to and select previous Clip
+    mac:
+      mod: ['_control', '_option', '_tab']
+    windows:
+      mod: ['_ctrl', '_start', '_tab']
+  - description: Go to and select previous Clip
+    mac:
+      mod: ['_command', '_control']
+      chars: ['l']
+    windows:
+      mod: ['_ctrl', '_start']
+      chars: ['l']
+  - description: Go to song start
+    mac:
+      mod: ['_control', '_return']
+    windows:
+      mod: ['_start', '_enter']
+  - description: Extend selection to Song Start
+    mac:
+      mod: ['_shift', '_control', '_return']
+    windows:
+      mod: ['_shift', '_start', '_enter']
+  - description: Extend selection to next Clip-boundary
+    mac:
+      mod: ['_shift', '_tab']
+    windows:
+      mod: ['_shift', '_tab']
+  - description: Extend selection to previous Clip-boundary
+    mac:
+      mod: ['_option', '_shift', '_tab']
+    windows:
+      mod: ['_ctrl', '_shift', '_tab']
+  - description: Extend selection to include next Clip
+    mac:
+      mod: ['_control', '_shift', '_tab']
+    windows:
+      mod: ['_start', '_shift', '_tab']
+  - description: Extend selection to include next Clip
+    mac:
+      mod: ['_command', '_control', '_shift']
+      chars: ["'"]
+    windows:
+      mod: ['_ctrl', '_start', '_shift']
+      chars: ["'"]
+  - description: Extend selection to include previous Clip
+    mac:
+      mod: ['_control', '_shift', '_option', '_tab']
+    windows:
+      mod: ['_start', '_shift', '_ctrl', '_tab']
+  - description: Extend selection to include next Clip
+    mac:
+      mod: ['_command', '_control', '_shift']
+      chars: ['l']
+    windows:
+      mod: ['_ctrl', '_start', '_shift']
+      chars: ['l']
+  # session timeline navigation
+  - description: Return to start of session
+    mac:
+      mod: ['_return']
+    windows:
+      mod: ['_enter']
+  - description: Go to end of session
+    mac:
+      mod: ['_option', '_return']
+    windows:
+      mod: ['_ctrl', '_enter']
+  - description: Extend selection to start of session
+    mac:
+      mod: ['_shift', '_return']
+    windows:
+      mod: ['_shift', '_enter']
+  - description: Extend selection to end of session
+    mac:
+      mod: ['_option', '_shift', '_return']
+    windows:
+      mod: ['_ctrl', '_shift', '_enter']
+  - description: Link Timeline and Edit selection
+    mac:
+      mod: ['_shift']
+      chars: ['/']
+    windows:
+      mod: ['_shift']
+      chars: ['/']
+  # Editing, Nudging, and Trimming
+  - description: Change Grid value
+    mac:
+      mod: ['_control', '_option']
+      chars: ['+', '-']
+    windows:
+      mod: ['_start', '_alt']
+      chars: ['+', '-']
+  - description: Change Nudge value
+    mac:
+      mod: ['_command', '_option']
+      chars: ['+', '-']
+    windows:
+      mod: ['_ctrl', '_alt']
+      chars: ['+', '-']
+  - description: Nudge start/end data to right/left by Nudge value (keeps underlying audio and moves start/end)
+    mac:
+      mod: ['_shift']
+      chars: ['+', '-']
+    windows:
+      mod: ['_shift']
+      chars: ['+', '-']
+  - description: Nudge data within current Clip to right/left by Nudge value (keeps Clip start/end and moves underlying audio)
+    mac:
+      mod: ['_control']
+      chars: ['+', '-']
+    windows:
+      mod: ['_start']
+      chars: ['+', '-']
+  - description: Nudge left selection boundary right/left by Nudge value
+    mac:
+      mod: ['_option', '_shift']
+      chars: ['+', '-']
+    windows:
+      mod: ['_alt', '_shift']
+      chars: ['+', '-']
+  - description: Nudge right selection boundary right/left by Nudge value
+    mac:
+      mod: ['_command', '_shift']
+      chars: ['+', '-']
+    windows:
+      mod: ['_ctrl', '_shift']
+      chars: ['+', '-']
+  - description: Trim left edge of Clip to right/left by Nudge value
+    mac:
+      mod: ['_option']
+      chars: ['+', '-']
+    windows:
+      mod: ['_alt']
+      chars: ['+', '-']
+  - description: Trim right edge of Clip to right/left by Nudge value
+    mac:
+      mod: ['_command']
+      chars: ['+', '-']
+    windows:
+      mod: ['_ctrl']
+      chars: ['+', '-']
+  # playlists
   - description: Move the Edit cursor up and down through Playlist lanes
     mac:
       mod: ['_control']
@@ -63,21 +235,21 @@ shortcuts:
       mod: ['_command', '_control']
       chars: ['\']
     windows:
-      mod: ['_control', '_start']
+      mod: ['_ctrl', '_start']
       chars: ['\']
   - description: Duplicate the main playlist for each track in the session
     mac:
       mod: ['_command', '_option', '_control']
       chars: ['\']
     windows:
-      mod: ['_control', '_alt', '_start']
+      mod: ['_ctrl', '_alt', '_start']
       chars: ['\']
   - description: Duplicate the main playlist for each selected track in the session
     mac:
       mod: ['_command', '_option', '_control', '_shift']
       chars: ['\']
     windows:
-      mod: ['_control', '_alt', '_start', '_shift']
+      mod: ['_ctrl', '_alt', '_start', '_shift']
       chars: ['\']
   - description: Cycle through Edit tools
     mac:

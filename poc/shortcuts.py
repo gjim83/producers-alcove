@@ -17,13 +17,22 @@ MOD_KEY_MAP = {
             'keycode': 18
         },
         '_control': {
-            'ui_char': '^',
+            'ui_char': '⌃',
             'keycode': 17
         },
         '_esc': {
             'ui_char': '␛',
             'keycode': 27
-        }
+        },
+        '_tab': {
+            'ui_char': '⇥',
+            'keycode': 9
+        },
+        '_return': {
+            'ui_char': '⏎',
+            'keycode': 13
+        },
+
     },
     'windows': {
         '_shift': {
