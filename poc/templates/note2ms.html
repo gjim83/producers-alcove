@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{ page_data.page_name }}</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/static/js/main.js"></script>
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    <style>
+        /*body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }*/
+
+        h1 {
+            color: green;
+        }
+
+        img {
+            height: 1em;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .input-bpm {
+            width: 86px;
+            height: 30px;
+            left: 710px;
+            top: 220px;
+            padding: 0 10px;
+            font-family: 'PP Monument Condensed';
+            font-size: 20px;
+        }
+
+        .input-beat-base {
+            width: 100px;
+            height: 40px;
+            left: 710px;
+            top: 260px;
+            border: 0px;
+            font-size: 24px;
+        }
+
+        .text-table-title {
+            font-size: 30px;
+            top: calc(50% - 120px);
+            left: calc(50% - 250px);
+            width: 500px;
+            align-content: center;
+        }
+
+        .text-bpm {
+            width: 68px;
+            height: 85px;
+            left: calc(50% - 34px - 27px);
+            top: 210px;
+            font-size: 32px;
+            line-height: 47px;
+        }
+
+        .text-beat-base {
+            width: 130px;
+            height: 40px;
+            left: calc(50% - 110px);
+            top: 255px;
+            font-size: 32px;
+            line-height: 47px;
+        }
+
+        .text-note-value {
+            font-size: 32px;
+            line-height: 47px;
+            height: 85px;
+            top: calc(50% - 64.5px);
+        }
+
+        .text-1-2 { width: 25px; left: calc(50% - 12.5px - 470.5px); }
+        .text-1-4d { width: 24px; left: calc(50% - 12px - 368px); }
+        .text-1-4 { width: 39px; left: calc(50% - 19.5px - 257.5px); }
+        .text-1-8d { width: 26px; left: calc(50% - 13px - 161px); }
+        .text-1-8 { width: 35px; left: calc(50% - 17.5px - 52.5px); }
+        .text-1-8t { width: 47px; left: calc(50% - 23.5px + 57.5px); }
+        .text-1-16d { width: 34px; left: calc(50% - 17px + 154px); }
+        .text-1-16 { width: 42px; left: calc(50% - 21px + 262px); }
+        .text-1-16t { width: 36px; left: calc(50% - 18px + 362px); }
+        .text-1-32 { width: 36px; left: calc(50% - 18px + 465px); }
+
+        .text-ms { font-size: 28px; top: calc(50% - 30px); }
+
+        .input-calc {
+            position: absolute;
+            width: 100px;
+            left: calc(50% - 50px);
+            top: 320px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+{%- from "page_header.js" import page_header as ph %}
+{{ ph(page_data) }}
+{%- if notes %}
+        <br>
+        <div class="text-label text-table-title">note lenghts in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
+        <!-- Note Value Labels -->
+    {%- for note, duration in notes.items() %}
+        {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
+        <div class="text-label text-note-value {{ note_style }}">{{ note }}</div>
+        <div class="text-label text-note-value {{ note_style }} text-ms">{{ '%0.2f' | format(duration*1000) }}</div>
+    {%- endfor %}
+        <br>
+{%- endif %}
+
+{%- block content %}
+        <form method="post">
+            <div>
+                <label for="bpm" class="text-label text-bpm">bpm:</label>
+                <input type="number" name="bpm" id="bpm" step="0.001"
+                       placeholder="{{ bpm }}" min="1" max="500" value="{{ bpm }}" class="input-field input-bpm" required>
+            </div>
+            <div>
+                <div class="text-label text-beat-base">beat base:</div>
+                <div class="input-field input-beat-base">
+                    <input type="radio" id="4" name="sig_base" value="4"{{ " checked" if sig_base == 4 else "" }}>
+                    <label for="4"><img src="static/images/crotchet.png"></label>
+                    <input type="radio" id="8" name="sig_base" value="8"{{ " checked" if sig_base == 8 else "" }}>
+                    <label for="8"><img src="static/images/d_crotchet.png"></label>
+                </div>
+            </div>
+            <div class="input-calc">
+                <input type="submit" class="button" value="Calculate">
+            </div>
+        </form>
+{%- endblock %}
+    </div>
+</body>
+
+</html>
