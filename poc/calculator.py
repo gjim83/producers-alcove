@@ -29,13 +29,19 @@ MULTIPLIERS = {
     '1/8d': 1/8*1.5,
     '1/8': 1/8,
     '1/8t': 1/8*2/3,
+    '1/16d': 1/16*1.5,
     '1/16': 1/16,
     '1/16t': 1/16*2/3,
     '1/32': 1/32,
-    '1/64': 1/64
 }
 
 
+INTONATION_NAME_MAP = {
+    'equal_temp': 'equal temperament',
+}
+
+
+# Functions
 def get_all_notes():
     """
     Generate a list of all names of notes in a standard 88 key piano (e.g. A0, E2, etc...)
@@ -64,16 +70,10 @@ def get_all_notes():
                 break
         if stop:
             break
+
     return all_notes
 
 
-ALL_NOTES = get_all_notes()
-
-INTONATION_NAME_MAP = {
-    'equal_temp': 'equal temperament',
-}
-
-# Functions
 def eq_temp_freq(note, base_freq):
     """
     Equal temperament calculation of note frequency
@@ -83,7 +83,8 @@ def eq_temp_freq(note, base_freq):
 
     :return: 2 decimal float representing the frequency of the note
     """
-    diff = ALL_NOTES.index(note) - ALL_NOTES.index('A4')
+    all_notes = get_all_notes()
+    diff = all_notes.index(note) - all_notes.index('A4')
     return base_freq * pow(2, diff/12)
 
 
@@ -97,9 +98,8 @@ def get_frequency(note, base_freq, intonation="equal_temp"):
 
     :return: 2 decimal float representing the frequency of the note
     """
-    base_freq = float(base_freq)
     if intonation == "equal_temp":
-        return eq_temp_freq(note, base_freq)
+        return eq_temp_freq(note, float(base_freq))
     return None
 
 
@@ -124,10 +124,7 @@ def get_note_durations(time_sig_base, bpm):
         """
         return multiplier if sig_base == 4 else multiplier * 2/3
 
-    beat_len = 60/bpm
-
-    durations = {}
-    for note, multiplier in MULTIPLIERS.items():
-        durations[note] = beat_len * _rel_duration(time_sig_base, multiplier)
-
-    return durations
+    return {
+        note: 60/bpm * _rel_duration(time_sig_base, multiplier)
+        for note, multiplier in MULTIPLIERS.items()
+    }
