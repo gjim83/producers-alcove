@@ -3,8 +3,13 @@ import os
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 
-from .calculator import get_frequency, get_note_durations, INTONATION_NAME_MAP, ALL_NOTES
+from .calculator import get_frequency, get_note_durations, get_all_notes, INTONATION_NAME_MAP
 from .shortcuts import get_ui_shortcuts_data, INDEX_MAP, MOD_KEY_MAP, UI_SC_DATA
+from .page_defaults import PageDefaults as PD
+
+
+ALL_NOTES = get_all_notes()
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -27,6 +32,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # Initialise page defaults
+    index_pd = PD('index.html')
+    search_pd = PD('search.html')
+    note2Hz_pd = PD('note2Hz.html')
+    note2ms_pd = PD('note2ms.html')
+
     # a simple page that says hello
     @app.route('/hello')
     def hello():
@@ -39,13 +50,17 @@ def create_app(test_config=None):
     # note to freq calculator
     @app.route('/calc')
     def calc():
-        return redirect(url_for('note2freq'))
+        return redirect(url_for('note2Hz'))
 
-    @app.route('/note2freq', methods=['POST', 'GET'])
+    @app.route('/note2freq')
     def note2freq():
+        return redirect(url_for('note2Hz'))
+
+    @app.route('/note2Hz', methods=['POST', 'GET'])
+    def note2Hz():
         if request.method == 'GET':
             return render_template(
-                'note2freq.html',
+                'note2Hz.html',
                 freq=-1,
                 base_freq=440.0,
                 note='A4',
@@ -54,7 +69,7 @@ def create_app(test_config=None):
             )
         elif request.method == 'POST':
             return render_template(
-                'note2freq.html',
+                'note2Hz.html',
                 freq="{:.2f}".format(
                     calculator.get_frequency(
                         request.form['note'],
@@ -70,23 +85,30 @@ def create_app(test_config=None):
             )
 
     # bpm to note duration calculator
-    @app.route('/beatduration', methods=['POST', 'GET'])
+    @app.route('/beatduration')
     def beatduration():
+        return redirect(url_for('note2ms'))
+
+    @app.route('/note2ms', methods=['POST', 'GET'])
+    def note2ms():
         if request.method == 'GET':
             return render_template(
-                'beatduration.html',
+                note2ms_pd.filename,
                 notes=None,
                 sig_base=4,
                 bpm=120,
+                page_data=note2ms_pd
             )
         elif request.method == 'POST':
             sig_base = int(request.form['sig_base'])
             bpm = float(request.form['bpm'])
+            bpm = int(bpm) if bpm.is_integer() else bpm
             return render_template(
-                'beatduration.html',
+                note2ms_pd.filename,
                 notes=get_note_durations(sig_base, bpm),
                 sig_base=sig_base,
                 bpm=bpm,
+                page_data=note2ms_pd
             )
 
     # shortcut search
