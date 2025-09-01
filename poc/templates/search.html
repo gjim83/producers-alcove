@@ -29,11 +29,58 @@
             background-color: black;
             color: #dddddd;
         }
+
+        /* easter egg */
+        .popup {
+          position: relative;
+          display: inline-block;
+          cursor: pointer;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+        }
+
+        /* The actual popup */
+        .popup .easterEgg {
+          visibility: hidden;
+          width: 300px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 8px 0;
+          position: absolute;
+          z-index: 1;
+          top: 30px;
+          left: 50%;
+          margin-left: -80px;
+        }
+
+        /* Toggle this class - hide and show the popup */
+        .popup .show {
+          visibility: visible;
+          -webkit-animation: fadeIn 1s;
+          animation: fadeIn 1s;
+        }
+
+        /* Add animation (fade in the popup) */
+        @-webkit-keyframes fadeIn {
+          from {opacity: 0;}
+          to {opacity: 1;}
+        }
+
+        @keyframes fadeIn {
+          from {opacity: 0;}
+          to {opacity:1 ;}
+        }
     </style>
 </head>
     <body>
         <form>
+            <div onclick="easterEgg();" class="popup">
             <input id="searchtext" type="text" placeholder="Type text to search in description">
+            <span class="easterEgg" id="easterEggPopup"><img src="/static/images/heisenberg.png" width="100%"></span></div>
             <input id="searchelems" type="text" placeholder="Press shortcut keys">
             <input type="button" id="searchkeyreset" value="Reset Key Search">
             <br><input type="reset" id="fullreset" value="Reset Full Search">
@@ -71,6 +118,7 @@
     </body>
 
     <script>
+        getIP();
         const modKeyMap = JSON.parse('{{ mod_key_map|tojson }}');
         let scIndexData = [];
         fetch('{{ url_for("sc_index") }}')

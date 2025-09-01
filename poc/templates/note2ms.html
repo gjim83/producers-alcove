@@ -114,7 +114,7 @@
 {{ ph(page_data) }}
 {%- if notes %}
         <br>
-        <div class="text-label text-table-title">note lenghts in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
+        <div class="text-label text-table-title">note lengths in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
         <!-- Note Value Labels -->
     {%- for note, duration in notes.items() %}
         {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
