@@ -1,8 +1,7 @@
 pages = {
     'index.html': {
         'path': '/',
-        'display': 'home',
-        'subtitle': None
+        'display': 'home'
     },
     'search.html': {
         'path': '/search',
