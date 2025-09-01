@@ -2,7 +2,7 @@
         <!-- Title -->
         <h1 class="main-title">producers' alcove_</h1>
 
-    {%- if page_data.get('subtitle')  %}
+    {%- if page_data.subtitle is defined  %}
         <!-- Subtitle -->
         <h2 class="main-title subtitle">{{ page_data.subtitle }}</h2>
 
