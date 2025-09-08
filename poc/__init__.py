@@ -2,6 +2,7 @@ import json
 import os
 
 from flask import Flask, render_template, request, jsonify, redirect, url_for
+from jinja2 import Environment, FileSystemLoader
 
 from .calculator import get_frequency, get_note_durations, get_all_notes, INTONATION_NAME_MAP
 from .shortcuts import get_ui_shortcuts_data, INDEX_MAP, MOD_KEY_MAP, UI_SC_DATA
@@ -9,6 +10,27 @@ from .page_defaults import PageDefaults as PD
 
 
 ALL_NOTES = get_all_notes()
+
+
+def render_bespoke_templates():
+    """
+    Render templates that are considered static files by Flask and write files.
+    """
+    base_dir = os.path.abspath(os.path.dirname(__file__))
+    bespoke_template_dir = f'{base_dir}/bespoke_templates'
+    templates = [
+        {
+            'path': 'static/css/main.css',
+            'context': {'defaults': PD('static/css/main.css').css}
+        }
+    ]
+
+    env = Environment(loader=FileSystemLoader(bespoke_template_dir))
+    for template in templates:
+        loaded_tmpl = env.get_template(template['path'])
+        result = loaded_tmpl.render(template['context'])
+        with open(os.path.join(base_dir, template['path']), 'w') as f:
+            f.write(result)
 
 
 def create_app(test_config=None):
@@ -37,6 +59,9 @@ def create_app(test_config=None):
     search_pd = PD('search.html')
     note2Hz_pd = PD('note2Hz.html')
     note2ms_pd = PD('note2ms.html')
+
+    # bespoke templates are not part of Flask
+    render_bespoke_templates()
 
     # a simple page that says hello
     @app.route('/hello')

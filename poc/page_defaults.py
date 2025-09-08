@@ -18,7 +18,15 @@ pages = {
         'display': 'note to ms calculator',
         'subtitle': 'note to ms calculator'
     },
+    'static/css/main.css': {}
 }
+
+
+class CssDefaults:
+    bg_color = '#BCCAD0'
+    font_color = '#707A7E'
+    font_color_dark = '#495054'
+    font_color_white = '#F8F8FF'
 
 
 class PageDefaults:
@@ -39,3 +47,7 @@ class PageDefaults:
             for filename, data in pages.items()
             if filename != self.filename
         ]
+
+    @property
+    def css(self):
+        return CssDefaults
