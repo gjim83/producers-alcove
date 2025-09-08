@@ -4,34 +4,13 @@
 <head>
     <title>producer's alcove_ : {{ page_data.display }}</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="/static/js/main.js"></script>
-    <link rel="stylesheet" href="/static/css/main.css">
-
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     <style>
-        /*body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }*/
-
-        h1 {
-            color: green;
-        }
-
+        /* page specific css */
+        /* note images */
         img {
             height: 1em;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 50%;
-            margin: 20px auto;
-        }
-
-        th,
-        td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
         }
 
         .input-bpm {
@@ -110,7 +89,7 @@
 
 <body>
     <div class="page-container">
-{%- from "page_header.js" import page_header as ph %}
+{%- from "page_header.j2" import page_header as ph %}
 {{ ph(page_data) }}
 {%- if notes %}
         <br>
