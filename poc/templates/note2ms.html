@@ -20,7 +20,7 @@
             top: 220px;
             padding: 0 10px;
             font-family: 'PP Monument Condensed';
-            font-size: 20px;
+            font-size: 24px;
         }
 
         .input-beat-base {
@@ -89,40 +89,40 @@
 
 <body>
     <div class="page-container">
-{%- from "page_header.j2" import page_header as ph %}
-{{ ph(page_data) }}
-{%- if notes %}
-        <br>
-        <div class="text-label text-table-title">note lengths in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
-        <!-- Note Value Labels -->
-    {%- for note, duration in notes.items() %}
-        {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
-        <div class="text-label text-note-value {{ note_style }}">{{ note }}</div>
-        <div class="text-label text-note-value {{ note_style }} text-ms">{{ '%0.2f' | format(duration*1000) }}</div>
-    {%- endfor %}
-        <br>
-{%- endif %}
+        {%- from "page_header.j2" import page_header as ph %}
+        {{ ph(page_data) }}
+            {%- if notes %}
+            <br>
+            <div class="text-label text-table-title">note lengths in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
+                <!-- Note Value Labels -->
+                {%- for note, duration in notes.items() %}
+                    {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
+            <div class="text-label text-note-value {{ note_style }}">{{ note }}</div>
+            <div class="text-label text-note-value {{ note_style }} text-ms">{{ '%0.2f' | format(duration*1000) }}</div>
+                {%- endfor %}
+            <br>
+            {%- endif %}
 
 {%- block content %}
-        <form method="post">
-            <div>
-                <label for="bpm" class="text-label text-bpm">bpm:</label>
-                <input type="number" name="bpm" id="bpm" step="0.001"
-                       placeholder="{{ bpm }}" min="1" max="500" value="{{ bpm }}" class="input-field input-bpm" required>
-            </div>
-            <div>
-                <div class="text-label text-beat-base">beat base:</div>
-                <div class="input-field input-beat-base">
-                    <input type="radio" id="4" name="sig_base" value="4"{{ " checked" if sig_base == 4 else "" }}>
-                    <label for="4"><img src="static/images/crotchet.png"></label>
-                    <input type="radio" id="8" name="sig_base" value="8"{{ " checked" if sig_base == 8 else "" }}>
-                    <label for="8"><img src="static/images/d_crotchet.png"></label>
+            <form method="post">
+                <div>
+                    <label for="bpm" class="text-label text-bpm">bpm:</label>
+                    <input type="number" name="bpm" id="bpm" step="0.001"
+                           placeholder="{{ bpm }}" min="1" max="500" value="{{ bpm }}" class="input-field input-bpm" required>
                 </div>
-            </div>
-            <div class="input-calc">
-                <input type="submit" class="button" value="Calculate">
-            </div>
-        </form>
+                <div>
+                    <div class="text-label text-beat-base">beat base:</div>
+                    <div class="input-field input-beat-base">
+                        <input type="radio" id="4" name="sig_base" value="4"{{ " checked" if sig_base == 4 else "" }}>
+                        <label for="4"><img src="static/images/crotchet.png"></label>
+                        <input type="radio" id="8" name="sig_base" value="8"{{ " checked" if sig_base == 8 else "" }}>
+                        <label for="8"><img src="static/images/d_crotchet.png"></label>
+                    </div>
+                </div>
+                <div class="input-calc">
+                    <input type="submit" class="button" value="Calculate">
+                </div>
+            </form>
 {%- endblock %}
     </div>
 </body>

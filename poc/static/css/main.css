@@ -47,6 +47,14 @@ input[type="radio"] {
     top: 110px;
 }
 
+/* Main content container */
+.main-content {
+    position: absolute;
+    align-items: center;
+    top: 220px;
+    width: 100%;
+}
+
 /* Menu */
 .menu-container {
     display: flex;
@@ -58,6 +66,7 @@ input[type="radio"] {
     position: absolute;
     left: 39px;
     top: 45px;
+    z-index: 10;
 }
 
 .menu-button {
@@ -132,11 +141,22 @@ input:checked ~ .dropmenu{
 /* Input fields */
 .input-field {
     position: absolute;
-    border: 2px solid #707A7E;
+    border: 2px solid #495054;
     background: transparent;
     box-sizing: border-box;
+    border: 0;
+    outline: 0;
+    border-bottom: 2px solid #495054;
+    font-size: 24px;
+    font-family: 'PP Monument Condensed';
 }
 
+::placeholder {
+    font-family: 'PP Monument Condensed';
+    font-style: normal;
+    font-size: 24px;
+    color: #90979B;
+}
 
 /* Buttons */
 .button {

@@ -27,6 +27,7 @@ class CssDefaults:
     font_color = '#707A7E'
     font_color_dark = '#495054'
     font_color_white = '#F8F8FF'
+    font_color_light = "#90979B"
 
 
 class PageDefaults:

@@ -137,17 +137,18 @@ def create_app(test_config=None):
             )
 
     # shortcut search
-    @app.route('/data/sc_index.json')
-    def sc_index():
-        return jsonify(INDEX_MAP)
-
     @app.route('/search', methods=['GET'])
     def search():
         return render_template(
             'search.html',
             shortcuts=UI_SC_DATA,
-            mod_key_map=MOD_KEY_MAP
+            mod_key_map=MOD_KEY_MAP,
+            page_data=search_pd
         )
+
+    @app.route('/data/sc_index.json')
+    def sc_index():
+        return jsonify(INDEX_MAP)
 
     return app
 

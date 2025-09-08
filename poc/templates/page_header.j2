@@ -19,7 +19,9 @@
             </label>
             <div class="dropmenu">
             {%- for page in page_data.dropmenu_items %}
+                {%- if page.path is defined %}
                 <a href="{{ page.path }}">{{ page.display }}</a>
+                {%- endif %}
             {%- endfor %}
             </div>
         </div>
