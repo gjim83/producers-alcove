@@ -248,9 +248,11 @@
 
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
-                    case {{ data['keycode'] }}:
+                        {%- for code in data['keycode'] %}
+                    case {{ code }}:
                         nonCharKey = '{{ key }}';
                         break;
+                        {%- endfor %}
                     {%- endfor %}
                 }
                 searchElemsUnique.push(...searchElems);

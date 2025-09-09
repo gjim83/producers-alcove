@@ -2,35 +2,36 @@ import yaml
 
 from copy import deepcopy
 
+
 MOD_KEY_MAP = {
     'mac': {
         '_shift': {
             'ui_char': '⇧',
-            'keycode': 16
+            'keycode': [16]
         },
         '_command': {
             'ui_char': '⌘',
-            'keycode': 224
+            'keycode': [224, 91, 93]
         },
         '_option': {
             'ui_char': '⌥',
-            'keycode': 18
+            'keycode': [18]
         },
         '_control': {
             'ui_char': '⌃',
-            'keycode': 17
+            'keycode': [17]
         },
         '_esc': {
             'ui_char': '␛',
-            'keycode': 27
+            'keycode': [27]
         },
         '_tab': {
             'ui_char': '⇥',
-            'keycode': 9
+            'keycode': [9]
         },
         '_return': {
             'ui_char': '⏎',
-            'keycode': 13
+            'keycode': [13]
         },
 
     },
@@ -40,7 +41,7 @@ MOD_KEY_MAP = {
         },
         '_esc': {
             'ui_char': '␛',
-            'keycode': 27
+            'keycode': [27]
         }
     }
 }
