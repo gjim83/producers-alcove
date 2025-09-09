@@ -13,6 +13,7 @@
         table {
             border-collapse: collapse;
             border-style: hidden;
+            color: {{ page_data.css.font_color_dark }};
             width: 80%;
             margin: 20px auto;
             top: 140px;
@@ -20,20 +21,27 @@
             font-size: 20px;
         }
 
-        tbody tr:nth-child(odd) {
-          background-color: #fffaf0;
-          color: #000;
-        }
-
-        tbody tr:nth-child(even) {
-          background-color: #dcdcdc;
-          color: #000;
-        }
-
         th {
-            background-color: black;
-            color: #dddddd;
+            border-bottom: 2px solid {{ page_data.css.font_color_dark }};
             text-align: left;
+            font-size: 24px;
+        }
+
+        tbody tr {
+            border-bottom: 2px solid {{ page_data.css.font_color_dark }};
+        }
+
+        .no-results-message {
+            top: 140px;
+            position: relative;
+            font-size: 24px;
+            color: {{ page_data.css.font_color_dark }};
+            text-align: center;
+            display: none;
+        }
+
+        #searchDisplay {
+            display: none;
         }
 
         .input-shortcut-search {
@@ -44,7 +52,7 @@
         }
 
         .input-key-search {
-            top: 42px;
+            top: 46px;
             width: 200px;
             right: calc(50% - 38px);
             font-size: 24px;
@@ -52,7 +60,7 @@
 
         .reset-key-search-button {
             position: absolute;
-            top: 48px;
+            top: 52px;
             left: calc(50% + 42px);
             padding: 2px 8px;
             margin: 0px;
@@ -62,7 +70,7 @@
 
         .reset-full-search-button {
             position: absolute;
-            top: 90px;
+            top: 100px;
             padding: 2px 8px;
             margin: 0px;
             font-size: 16px;
@@ -72,7 +80,7 @@
 
         .current-search-container {
             position: relative;
-            top: 120px;
+            top: 124px;
             font-size: 24px;
         }
 
@@ -148,11 +156,12 @@
                     <div>current search keys:</div>
                     <div id="searchDisplayString"></div>
                 </div>
-                <table>
+                <div id="no-results-div" class="no-results-message">I don't know any shortcuts that match your search :'( sorry...</div>
+                <table id="outer-sctable">
                     <tr>
-                        <th>Description</th>
-                        <th>Mac</th>
-                        <th>Windows</th>
+                        <th>shortcut description</th>
+                        <th>mac</th>
+                        <th>windows</th>
                     </tr>
                     <tbody id="sctable">
                     {%- for sc in shortcuts %}
@@ -201,17 +210,26 @@
         })
         .catch(error => console.error('Failed to fetch data:', error));
 
-        let displayElemIndex = 0;
         let show = true;
         let scDescription = '';
         let searchElemsUnique = [];
         let searchText =  '';
         let rowsToShowKeys = [];  // rows to show if user has searched for shortcut keys
         let rowsToShowText = [];  // rows to show if user has searched for shortcut description
+
         $(document).ready(function () {
+           function toggleNoResultsMessage(showNoResults) {
+                if (showNoResults) {
+                    $("#no-results-div").toggle(true);
+                    $("#outer-sctable").toggle(false);
+                } else {
+                    $("#no-results-div").toggle(false);
+                    $("#outer-sctable").toggle(true);
+                };
+            }
+
             $("#searchtext").on("keyup", function () {
                 rowsToShowText = [];
-                displayElemIndex = 0;
                 searchText = $.trim($("#searchtext").val()).toLowerCase()
 
                 $("#sctable tr").each(function (index) {
@@ -223,19 +241,13 @@
                     show = allowedByKeySearch && scDescription.indexOf(searchText) !== -1;
                     $(this).toggle(show);
                     if (!show) { return };
-                    /* this should be done by setting the class instead of directly
-                       updating CSS but couldn't get it to work properly */
-                    if (displayElemIndex % 2 === 0) {
-                        $(this).css('background-color', '#dcdcdc');
-                    } else {
-                        $(this).css('background-color', '#fffaf0');
-                    };
-                    displayElemIndex++;
                     rowsToShowText.push(index)
                 });
+                toggleNoResultsMessage(rowsToShowText.length === 0);
             });
 
             $("#searchelems").on("keyup", function (event) {
+                $("#searchDisplay").toggle(true);
                 rowsToShowKeys = [];
                 let nonCharKey = '';
                 //console.log('keycode pressed')
@@ -269,7 +281,7 @@
                 $("#searchDisplayString").text(searchDisplayElems.join(" "));
 
                 let rowsToShowInit = false;
-                let shouldBreak = false;
+                let noResults = false;
                 let searchElemFound = false;
                 for (let iSE in searchElemsUnique) {
                     searchElemFound = false;
@@ -284,7 +296,7 @@
                         rowsToShowKeys = rowsToShowKeys.filter((el) => scIndexData[iIE][1].includes(el))
                         if (rowsToShowKeys.length === 0 && rowsToShowInit) {
                             // just stop if the current search combination is already returning no results
-                            shouldBreak = true;
+                            noResults = true;
                             break
                         }
                     }
@@ -294,64 +306,50 @@
                         rowsToShowKeys = [];
                         break;
                     }
-                    if (shouldBreak) {
+                    if (noResults) {
                         break
                     }
                 }
-
-                displayElemIndex = 0;
-                $("#sctable tr").each(function (index) {
-                    searchText = $.trim($("#searchtext").val()).toLowerCase()
-                    let allowedByTextSearch = true;
-                    if (searchText.length > 0) {
-                        allowedByTextSearch = rowsToShowText.indexOf(index) !== -1;
-                    }
-                    show = (rowsToShowKeys.includes(index) || searchElemsUnique.length === 0) && allowedByTextSearch;
-                    $(this).toggle(show);
-                    if (!show) { return };
-                    /* this should be done by setting the class instead of directly
-                       updating CSS but couldn't get it to work properly */
-                    if (displayElemIndex % 2 === 0) {
-                        $(this).css('background-color', '#dcdcdc');
-                    } else {
-                        $(this).css('background-color', '#fffaf0');
-                    };
-                    displayElemIndex++;
-                });
+                toggleNoResultsMessage(rowsToShowKeys.length === 0);
+                if (!noResults) {
+                    $("#sctable tr").each(function (index) {
+                        let allowedByTextSearch = true;
+                        if (searchText.length > 0) {
+                            allowedByTextSearch = rowsToShowText.indexOf(index) !== -1;
+                        }
+                        show = (rowsToShowKeys.includes(index) || searchElemsUnique.length === 0) && allowedByTextSearch;
+                        $(this).toggle(show);
+                        if (!show) { return };
+                    });
+                };
             });
 
             $("#searchkeyreset").click(function () {
-                displayElemIndex = 0;
                 searchElemsUnique = [];
                 rowsToShowKeys = [];
                 $("#searchDisplayString").text("");
-                $("#searchelems").val("")
-                $("#sctable tr").each(function (index) {
-                    show = rowsToShowText.indexOf(index) !== -1 || searchText.length === 0;
-                    $(this).toggle(show);
-                    if (show) {
-                        if (displayElemIndex % 2 === 0) {
-                            $(this).css('background-color', '#dcdcdc');
-                        } else {
-                            $(this).css('background-color', '#fffaf0');
-                        };
-                        displayElemIndex++;
-                    };
-                });
+                $("#searchelems").val("");
+                $("#searchDisplay").toggle(false);
+                let noResults = rowsToShowText.length === 0 && searchText.length > 0;
+                toggleNoResultsMessage(noResults);
+                if (!noResults) {
+                    $("#sctable tr").each(function (index) {
+                        show = rowsToShowText.indexOf(index) !== -1 || searchText.length === 0;
+                        $(this).toggle(show);
+                    });
+                };
             });
 
             $("#fullreset").click(function () {
+                toggleNoResultsMessage(false);
                 searchElemsUnique = [];
+                searchText = ''
                 rowsToShowKeys = [];
                 rowsToShowText = [];
                 $("#searchDisplayString").text("");
+                $("#searchDisplay").toggle(false);
                 $("#sctable tr").each(function (index) {
                     $(this).toggle(true);
-                    if (index % 2 === 0) {
-                        $(this).css('background-color', '#dcdcdc');
-                    } else {
-                        $(this).css('background-color', '#fffaf0');
-                    };
                 });
             });
         })
