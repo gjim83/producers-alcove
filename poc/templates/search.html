@@ -33,6 +33,7 @@
         th {
             background-color: black;
             color: #dddddd;
+            text-align: left;
         }
 
         .input-shortcut-search {
@@ -212,6 +213,7 @@
                 rowsToShowText = [];
                 displayElemIndex = 0;
                 searchText = $.trim($("#searchtext").val()).toLowerCase()
+
                 $("#sctable tr").each(function (index) {
                     let allowedByKeySearch = true;
                     if (searchElemsUnique.length > 0) {
@@ -240,6 +242,10 @@
                 //console.log(event.keyCode)
                 // let selectedColumn = $("#columnSelect").val();  // TODO filter display/search by OS
                 let searchElems = $("#searchelems").val().toLowerCase().split("")
+
+                // display search in upper case
+                $("#searchelems").val($("#searchelems").val().toUpperCase())
+
                 switch (event.keyCode) {
                     {%- for key, data in mod_key_map['mac'].items() %}
                     case {{ data['keycode'] }}:
