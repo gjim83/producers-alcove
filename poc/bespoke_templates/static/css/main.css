@@ -21,6 +21,7 @@ body {
     width: 1440px;
     height: 1024px;
     background: {{ defaults.bg_color }};
+    text-align: center;
 }
 
 input[type="radio"] {
@@ -61,7 +62,7 @@ input[type="radio"] {
     flex-direction: column;
     padding: 0;
     margin: 0;
-    align-items: left;
+    text-align: left;
     width: max-content;
     position: absolute;
     left: 39px;
@@ -130,7 +131,7 @@ input:checked ~ .dropmenu{
 /* Text labels */
 .text-label {
     position: absolute;
-    font-family: 'PP Monument Condensed';
+    font-family: 'PP Monument Condensed', sans-serif;
     font-style: normal;
     font-weight: 400;
     color: #495054;
@@ -148,14 +149,19 @@ input:checked ~ .dropmenu{
     outline: 0;
     border-bottom: 2px solid {{ defaults.font_color_dark  }};
     font-size: 24px;
-    font-family: 'PP Monument Condensed';
+    font-family: 'PP Monument Condensed', sans-serif;
 }
 
 ::placeholder {
-    font-family: 'PP Monument Condensed';
+    font-family: 'PP Monument Condensed', sans-serif;
     font-style: normal;
     font-size: 24px;
     color: {{ defaults.font_color_light }};
+}
+
+.select-option {
+    font-family: 'PP Monument Condensed', sans-serif;
+    font-size: 18px;
 }
 
 /* Buttons */
@@ -170,7 +176,7 @@ input:checked ~ .dropmenu{
     display: inline-block;
     margin: 4px 2px;
     cursor: pointer;
-    font-family: 'PP Monument Condensed';
+    font-family: 'PP Monument Condensed', sans-serif;
     font-weight: normal;
     font-size: 20px;
     letter-spacing: 2px;

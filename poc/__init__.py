@@ -90,7 +90,7 @@ def create_app(test_config=None):
                 base_freq=440.0,
                 note='A4',
                 all_notes=ALL_NOTES,
-                all_intonations=INTONATION_NAME_MAP
+                page_data=note2Hz_pd
             )
         elif request.method == 'POST':
             return render_template(
@@ -98,15 +98,13 @@ def create_app(test_config=None):
                 freq="{:.2f}".format(
                     calculator.get_frequency(
                         request.form['note'],
-                        request.form['base_freq'],
-                        request.form['intonation']
+                        request.form['base_freq']
                     )
                 ),
                 note=request.form['note'],
                 base_freq=request.form['base_freq'],
-                intonation=INTONATION_NAME_MAP[request.form['intonation']],
                 all_notes=ALL_NOTES,
-                all_intonations=INTONATION_NAME_MAP
+                page_data=note2Hz_pd
             )
 
     # bpm to note duration calculator
