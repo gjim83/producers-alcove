@@ -28,6 +28,7 @@ class CssDefaults:
     font_color_dark = '#495054'
     font_color_white = '#F8F8FF'
     font_color_light = "#90979B"
+    menu_bg_color = 'rgb(188,202,208,0.8)' # same as bg_color but slightly transparent
 
 
 class PageDefaults:

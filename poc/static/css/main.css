@@ -98,8 +98,8 @@ input[type="radio"] {
     width: 100%;
     overflow:hidden;
     list-style-type:none;
-    /*background:#444;*/
     transition:max-height 0.5s ease-out;
+    background-color: rgb(188,202,208,0.8);
 }
 
 .dropmenu a{
