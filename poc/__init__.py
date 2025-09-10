@@ -70,7 +70,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def index():
-        return render_template('index.html')
+        return render_template('index.html', page_data=index_pd)
 
     # note to freq calculator
     @app.route('/calc')

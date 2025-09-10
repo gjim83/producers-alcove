@@ -46,7 +46,7 @@ class PageDefaults:
         return [
             data
             for filename, data in pages.items()
-            if filename != self.filename
+            if filename != self.filename and data
         ]
 
     @property

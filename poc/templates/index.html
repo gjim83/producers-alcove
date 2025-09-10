@@ -1,38 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>producer's alcove_</title>
-    <style>
-        .button {
-            border: none;
-            border-radius: 12px;
-            color: white;
-            background-color: #696969;
-            padding: 12px 24px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
+    <head>
+        <title>producer's alcove_ : {{ page_data.display }}</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <style>
+            .button-container {
+                text-align: center;
+                top: 250px;
+                position: relative;
+            }
+        </style>
+    </head>
 
-        .button:hover {
-            background-color: #A9A9A9;
-        }
-    </style>
-
-</head>
-
-<body>
-    <h1 align="center">producer's alcove_</h1>
-    <p></p>
-    <div align="center">
-        <button class="button" onclick="window.location.href='{{ url_for('search') }}' ;">shortcut search</button>
-        <button class="button" onclick="window.location.href='{{ url_for('note2freq') }}' ;">note to frequency conversion</button>
-        <button class="button" onclick="window.location.href='{{ url_for('beatduration') }}' ;">beat to ms conversion</button>
-    </div>
-
-</body>
+    <body>
+        <div class="page-container">
+            {%- from "page_header.j2" import page_header as ph %}
+            {{ ph(page_data) }}
+            <div class="button-container">
+            {%- for page in page_data.dropmenu_items %}
+                <button class="button" onclick="window.location.href='{{ url_for(page.path|replace('/', '')) }}' ;">{{ page.subtitle }}</button>
+            {%- endfor%}
+            </div>
+        </div>
+    </body>
 </html>
