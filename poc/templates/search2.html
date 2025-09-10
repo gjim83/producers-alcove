@@ -139,8 +139,9 @@
             {{ ph(page_data) }}
             <div class="main-content">
                 <form style="text-align: center;">
-                    <div>
+                    <div onclick="easterEgg();" class="popup">
                         <input id="searchtext" type="text" class="input-field input-shortcut-search" placeholder="search by shortcut description...">
+                        <span class="easterEgg" id="easterEggPopup"><img src="/static/images/toasty.png" width="100%"></span>
                     </div>
                     <div>
                         <input id="searchelems" type="text" class="input-field input-key-search" placeholder="search by shortcut keys...">

@@ -144,6 +144,16 @@ def create_app(test_config=None):
             page_data=search_pd
         )
 
+    # shortcut search w easter egg
+    @app.route('/search2', methods=['GET'])
+    def search2():
+        return render_template(
+            'search2.html',
+            shortcuts=UI_SC_DATA,
+            mod_key_map=MOD_KEY_MAP,
+            page_data=search_pd
+        )
+
     @app.route('/data/sc_index.json')
     def sc_index():
         return jsonify(INDEX_MAP)

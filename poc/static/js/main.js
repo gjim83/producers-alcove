@@ -5,11 +5,12 @@ function menuClick(x) {
 // search page easter egg
 let ip = '';
 let popupCount = 0;
+let ARSip = '167.167.132.11';
+let ARIip = '62.31.28.217';
+let currentCFip = '104.28.192.51';
+let easterEggOffIP = 'whatever';
 function easterEgg() {
-    //if (ip !== '62.31.28.217') { return true; };
-    console.log('ip:', ip)
-    //if (ip !== '104.28.216.68') { return true; };
-    if (ip !== 'whatever because this is not supposed to be shown yet') { return true; };
+    if (ip !== ARSip) { return true; };
     if (popupCount < 2) {
         var popup = document.getElementById("easterEggPopup");
         popup.classList.toggle("show");
