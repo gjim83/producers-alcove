@@ -8,6 +8,8 @@
         <style>
             form {
                 text-align: center;
+                position: relative;
+                top: 0px;
             }
             table {
                 border-collapse: collapse;
@@ -15,7 +17,7 @@
                 color: {{ page_data.css.font_color_dark }};
                 width: 80%;
                 margin: 20px auto;
-                top: 140px;
+                top: 180px;
                 position: relative;
                 font-size: 20px;
                 text-align: left;
@@ -32,7 +34,7 @@
             }
 
             .no-results-message {
-                top: 140px;
+                top: 180px;
                 position: relative;
                 font-size: 24px;
                 color: {{ page_data.css.font_color_dark }};
@@ -45,14 +47,14 @@
             }
 
             .input-shortcut-search {
-                top: 0px;
+                top: 40px;
                 width: 250px;
                 left: calc(50% - 120px);
                 font-size: 24px;
             }
 
             .input-key-search {
-                top: 46px;
+                top: 86px;
                 width: 200px;
                 right: calc(50% - 38px);
                 font-size: 24px;
@@ -60,7 +62,7 @@
 
             .reset-key-search-button {
                 position: absolute;
-                top: 52px;
+                top: 92px;
                 left: calc(50% + 42px);
                 padding: 2px 8px;
                 margin: 0px;
@@ -70,7 +72,7 @@
 
             .reset-full-search-button {
                 position: absolute;
-                top: 100px;
+                top: 140px;
                 padding: 2px 8px;
                 margin: 0px;
                 font-size: 16px;
@@ -80,7 +82,7 @@
 
             .current-search-container {
                 position: relative;
-                top: 124px;
+                top: 164px;
                 font-size: 24px;
             }
 
@@ -131,6 +133,35 @@
               from {opacity: 0;}
               to {opacity:1 ;}
             }
+
+            /* help message */
+            .help-container {
+                width: 80px;
+                left: calc(50% - 40px);
+                position: relative;
+                text-align: center;
+                color: {{ page_data.css.font_color }};
+                font-size: 20px;
+                display: flex;
+                justify-content: center;
+                z-index: 10;
+            }
+
+            .help-content {
+                display: none;
+                position: absolute;
+                background-color: {{ page_data.css.bg_color }};
+                top: 0px;
+                width: 550px;
+                min-width: 130px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                padding: 12px 16px;
+                align-self: center;
+            }
+
+            .help-container:hover .help-content {
+                display: block;
+            }
         </style>
     </head>
     <body>
@@ -138,6 +169,40 @@
             {%- from "page_header.j2" import page_header as ph %}
             {{ ph(page_data) }}
             <div class="main-content">
+                <div class="help-container">ⓘ help
+                    <div class="help-content">
+                    <p>thanks for trying out our protools shortcut search engine!</p>
+
+                    <p>- use the 'search by shortcut description' field to filter shortcuts by<br>
+                        text. for example: 'selection', 'nudge' or 'trim'. use your backspace key<br>
+                        to fix typos in this field as you would in any other search
+                    </p>
+
+                    <p>- use the 'search by shortcut keys' field to filter shortcuts by<br>
+                        the actual keys you press. for example: shift, command or the letter 'p'<br>
+                        use the 'reset key search' instead of backspace in this one.<br>
+                        hint: you can press several and we'll show the shortcuts<br>
+                        that contain all the ones you pressed
+                    </p>
+
+                    <p>- you can use any combination of these two. try it out!</p>
+
+                    <p>__________________</p>
+
+                    <p>as this is a proof of concept, there's some bugs/limitations that<br>
+                    we're still working out:</p>
+
+                    <p>- 'backspace' is a key used in shortcuts, so deleting individual<br>
+                    characters from the shortcut key search doesn't reset the search.<br>
+                    please use 'reset key search' button in the mean time. we'll make this better soon</p>
+
+                    <p>- the 'tab' button actually needs to be pressed in the shortcut description<br>
+                    to get picked up by the search engine. weird, we know :( we're working on it</p>
+
+                    <p>- this is obviously a small subset of protools shortcuts. hang tight! we'll<br>
+                    keep adding more all the time</p>
+                    </div>
+                </div>
                 <form style="text-align: center;">
                     <div>
                         <input id="searchtext" type="text" class="input-field input-shortcut-search" placeholder="search by shortcut description...">
@@ -311,6 +376,7 @@
                 }
                 toggleNoResultsMessage(rowsToShowKeys.length === 0);
                 if (!noResults) {
+                    let combinedShown = false;
                     $("#sctable tr").each(function (index) {
                         let allowedByTextSearch = true;
                         if (searchText.length > 0) {
@@ -318,7 +384,13 @@
                         }
                         show = (rowsToShowKeys.includes(index) || searchElemsUnique.length === 0) && allowedByTextSearch;
                         $(this).toggle(show);
+                        if (show) {
+                            combinedShown = true;
+                        }
                     });
+                    if (!combinedShown) {
+                        toggleNoResultsMessage(true);
+                    }
                 };
             });
 
