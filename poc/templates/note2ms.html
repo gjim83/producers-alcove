@@ -70,6 +70,11 @@
             top: calc(50% - 54.5px);
         }
 
+        .results {
+            position: relative;
+            top: 530px;
+        }
+
         .text-1-2 { width: 25px; left: calc(50% - 12.5px - 470.5px); }
         .text-1-4d { width: 24px; left: calc(50% - 12px - 368px); }
         .text-1-4 { width: 39px; left: calc(50% - 19.5px - 257.5px); }
@@ -97,15 +102,15 @@
         {%- from "page_header.j2" import page_header as ph %}
         {{ ph(page_data) }}
             {%- if notes %}
-            <br>
-            <div class="text-label text-table-title">note lengths in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
-                <!-- Note Value Labels -->
-                {%- for note, duration in notes.items() %}
-                    {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
-            <div class="text-label text-note-value {{ note_style }}">{{ note }}</div>
-            <div class="text-label text-note-value {{ note_style }} text-ms">{{ '%0.2f' | format(duration*1000) }}</div>
-                {%- endfor %}
-            <br>
+            <div class="results">
+                <div class="text-label text-table-title">note lengths in miliseconds at {{ bpm }} bpm (1 beat = <img src="static/images/{{ 'd_' if sig_base == 8 else '' }}crotchet.png"> ):</div>
+                    <!-- Note Value Labels -->
+                    {%- for note, duration in notes.items() %}
+                        {%- set note_style = "text-%s" | format(note.replace('/', '-')) %}
+                <div class="text-label text-note-value {{ note_style }}">{{ note }}</div>
+                <div class="text-label text-note-value {{ note_style }} text-ms">{{ '%0.2f' | format(duration*1000) }}</div>
+                    {%- endfor %}
+            </div>
             {%- endif %}
 
 {%- block content %}
@@ -125,7 +130,7 @@
                     </div>
                 </div>
                 <div class="input-calc">
-                    <input type="submit" class="button" value="Calculate">
+                    <input type="submit" class="button" value="calculate">
                 </div>
             </form>
 {%- endblock %}

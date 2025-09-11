@@ -10,7 +10,8 @@ let ARIip = '62.31.28.217';
 let currentCFip = '104.28.192.51';
 let easterEggOffIP = 'whatever';
 function easterEgg() {
-    if (ip !== ARSip) { return true; };
+    console.log(ip)
+    if (ip !== ARIip) { return true; };
     if (popupCount < 2) {
         var popup = document.getElementById("easterEggPopup");
         popup.classList.toggle("show");

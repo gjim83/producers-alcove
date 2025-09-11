@@ -1,7 +1,8 @@
 pages = {
     'index.html': {
         'path': '/',
-        'display': 'home'
+        'display': 'home',
+        'subtitle': 'the platform to empower creatives'
     },
     'search.html': {
         'path': '/search',

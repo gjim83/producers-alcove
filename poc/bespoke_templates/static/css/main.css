@@ -12,14 +12,14 @@ body {
     background: {{ defaults.bg_color }};
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
 }
 
 .page-container {
     position: relative;
+    top: 0px;
     width: 1440px;
-    height: 1024px;
+    height: 100%;
     background: {{ defaults.bg_color }};
     text-align: center;
 }
@@ -46,6 +46,7 @@ input[type="radio"] {
 .subtitle {
     font-size: 36px;
     top: 110px;
+    width: 350px;
 }
 
 /* Main content container */

@@ -58,15 +58,22 @@
             .text-result-title {
                 position: relative;
                 font-size: 30px;
-                top: calc(50% - 110px);
+                /*top: calc(50% - 110px);*/
                 text-align: center;
+                width: 100%;
             }
 
             .text-result-freq {
                 position: relative;
                 font-size: 30px;
-                top: calc(50% - 110px);
+                /*top: calc(50% - 110px);*/
                 text-align: center;
+                width: 100%;
+            }
+
+            .results {
+                position: relative;
+                top: 420px;
             }
         </style>
     </head>
@@ -75,11 +82,6 @@
         <div class="page-container">
             {%- from "page_header.j2" import page_header as ph %}
             {{ ph(page_data) }}
-            {%- if freq != -1 %}
-            <div class="text-label text-result-title">frequency of {{ note }} (A4={{ base_freq }} Hz):</div>
-            <div class="text-label text-result-freq">{{ freq }} Hz</div>
-            {%- endif %}
-
             <form method="post">
                 <div>
                     <label for="base_freq" class="text-label text-reference-freq">tuning reference (Hz):</label>
@@ -97,6 +99,13 @@
                 <div class="input-calc">
                     <input type="submit" class="button" value="calculate">
                 </div>
+            {%- if freq != -1 %}
+                <div class="results">
+                    <div class="text-label text-result-title">frequency of {{ note }} (A4={{ base_freq }} Hz):</div>
+                    <div class="text-label text-result-freq">{{ freq }} Hz</div>
+                </div>
+            {%- endif %}
+
             </form>
         </div>
     </body>

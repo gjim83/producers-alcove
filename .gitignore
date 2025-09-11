@@ -1,6 +1,9 @@
+# served main.css file is generated as bespoke template
+poc/static/css/main.css
+
 .venv/
 .DS_Store
-characters
+poc/characters
 
 *.pyc
 __pycache__/
