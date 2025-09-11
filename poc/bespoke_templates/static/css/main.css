@@ -12,7 +12,6 @@ body {
     background: {{ defaults.bg_color }};
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
 }
 
@@ -31,8 +30,8 @@ input[type="radio"] {
 /* Title */
 .main-title {
     position: absolute;
-    width: 350px;
-    left: calc(50% - 175px);
+    width: 400px;
+    left: calc(50% - 200px);
     top: 40px;
     font-style: normal;
     font-weight: 400;
