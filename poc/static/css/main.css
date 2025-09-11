@@ -9,7 +9,7 @@
 body {
     margin: 0;
     font-family: 'PP Monument Condensed', sans-serif;
-    background: {{ defaults.bg_color }};
+    background: #BCCAD0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,12 +20,12 @@ body {
     position: relative;
     width: 1440px;
     height: 1024px;
-    background: {{ defaults.bg_color }};
+    background: #BCCAD0;
     text-align: center;
 }
 
 input[type="radio"] {
-    accent-color: {{ defaults.font_color }};
+    accent-color: #707A7E;
 }
 
 /* Title */
@@ -39,7 +39,7 @@ input[type="radio"] {
     font-size: 64px;
     line-height: 93px;
     text-align: center;
-    color: {{ defaults.font_color }};
+    color: #707A7E;
     margin: 0;
 }
 
@@ -99,13 +99,13 @@ input[type="radio"] {
     overflow:hidden;
     list-style-type:none;
     transition:max-height 0.5s ease-out;
-    background-color: {{ defaults.menu_bg_color }};
+    background-color: rgb(188,202,208,0.8);
 }
 
 .dropmenu a{
     display:block;
     padding:12px;
-    color: {{ defaults.font_color_dark }};
+    color: #495054;
     text-decoration:none;
     transition:background .3s;
     white-space:nowrap;
@@ -115,7 +115,7 @@ input[type="radio"] {
 
 .dropmenu a:hover{
     background:rgba(0,0,0,.3);
-    color:{{ defaults.font_color_white }};
+    color:#F8F8FF;
 }
 
 /*Hide the inputs*/
@@ -142,12 +142,12 @@ input:checked ~ .dropmenu{
 /* Input fields */
 .input-field {
     position: absolute;
-    border: 2px solid {{ defaults.font_color_dark }};
+    border: 2px solid #495054;
     background: transparent;
     box-sizing: border-box;
     border: 0;
     outline: 0;
-    border-bottom: 2px solid {{ defaults.font_color_dark  }};
+    border-bottom: 2px solid #495054;
     font-size: 24px;
     font-family: 'PP Monument Condensed', sans-serif;
 }
@@ -156,7 +156,7 @@ input:checked ~ .dropmenu{
     font-family: 'PP Monument Condensed', sans-serif;
     font-style: normal;
     font-size: 24px;
-    color: {{ defaults.font_color_light }};
+    color: #90979B;
 }
 
 .select-option {
@@ -166,10 +166,10 @@ input:checked ~ .dropmenu{
 
 /* Buttons */
 .button {
-    border: 2px solid {{ defaults.font_color_dark }};
+    border: 2px solid #495054;
     border-radius: 12px;
-    color: {{ defaults.font_color_dark }};
-    background-color: {{ defaults.bg_color }};
+    color: #495054;
+    background-color: #BCCAD0;
     padding: 12px 24px;
     text-align: center;
     text-decoration: none;
@@ -183,6 +183,6 @@ input:checked ~ .dropmenu{
 }
 
 .button:active {
-  background-color: {{ defaults.font_color_dark }};
-  color: {{ defaults.bg_color }};
+  background-color: #495054;
+  color: #BCCAD0;
 }
